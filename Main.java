@@ -7,14 +7,15 @@ public class Main {
     /* =============================
      *  Welcome & Main Menu
      * ============================= */
+    private static final java.util.Scanner SC = new java.util.Scanner(System.in);
+    private static String cyan = "\u001B[36m";
+    private static String yellow = "\u001B[33m";
+    private static String green = "\u001B[32m";
+    private static String reset = "\u001B[0m";
+    private static String red = "\u001B[31m";
 
     private static void welcomeMessage() {
-           clearScreen();
-
-    String cyan = "\u001B[36m";
-    String yellow = "\u001B[33m";
-    String green = "\u001B[32m";
-    String reset = "\u001B[0m";
+        clearScreen();
 
     System.out.println(yellow +
 " █████   ███   █████          ████                                        \n" +
@@ -37,7 +38,7 @@ reset);
     System.out.println();
     System.out.println(yellow + "Press ENTER to continue..." + reset);
 
-    new Scanner(System.in).nextLine();
+    SC.nextLine();
     clearScreen();
     }
 
@@ -49,28 +50,62 @@ reset);
         [E] Terminate
     */
     private static void mainMenu() {
-        // TODO: Show main menu, read user choice, route to sub-menus
+       while(true)
+       {
+        System.out.println("********************************");
+        System.out.println("[1] Primary School");
+        System.out.println("[2] Secondary School");
+        System.out.println("[3] High Schooll");
+        System.out.println("[4] University");
+        System.out.println("[5] Terminate");
+        System.out.println("********************************");
+        System.out.println("Please select an option to continue: ");
+        String s = SC.nextLine().trim();
+        if (s.length() != 1 || s.charAt(0) < '1' || s.charAt(0) > '5') {
+            System.out.println(red + "Invalid choice. Please select 1-5." + reset);
+            System.out.println(yellow + "Press ENTER to continue..." + reset);
+            SC.nextLine();
+            clearScreen();
+            continue;
+        }
+        int choice = s.charAt(0) - '0';
+
+        switch (choice) {
+            case 1:
+                subMenuOptionA();
+                break;
+            case 2:
+                subMenuOptionB();
+                break;
+            case 3:
+                subMenuOptionC();
+                break;
+            case 4:
+                subMenuOptionD();
+                break;
+            case 5:
+                System.out.println(green+"\nTurning the program off...");
+                System.out.println(red+"Thank you for using our program!");
+                return; 
+        }
+        clearScreen();
+      }
     }
+private static int readInt(Scanner scan) {
+    while (true) {
+        String input = scan.nextLine().trim();  // kullanıcı ne yazdıysa oku
+        try {
+            return Integer.parseInt(input);   // sayıya çevir, başarılıysa dön
+        } catch (NumberFormatException e) {
+            System.out.print("Invalid integer. Try again: "); // hata -> yeniden sor
+        }
+    }
+}
 
     /* Optional helpers for menu I/O (no implementation yet) */
     private static void clearScreen() {
            System.out.print("\033[H\033[2J");
     System.out.flush();
-    }
-
-    private static char readMenuChoice(Scanner sc) {
-        // TODO: Read a single non-empty character and return uppercase
-        return 'E';
-    }
-
-    private static int readInt(Scanner sc) {
-        // TODO: Safe integer input with retry
-        return 0;
-    }
-
-    private static String readLine(Scanner sc) {
-        // TODO: Safe full-line input
-        return "";
     }
 
     /* =============================
@@ -243,5 +278,6 @@ reset);
         // mainMenu();
 
          welcomeMessage();
+         mainMenu();
     }
 }
