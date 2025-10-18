@@ -42,13 +42,6 @@ reset);
     clearScreen();
     }
 
-    /*
-        [A] Primary School
-        [B] Secondary School
-        [C] High School
-        [D] University
-        [E] Terminate
-    */
     private static void mainMenu() {
        while(true)
        {
@@ -60,28 +53,20 @@ reset);
         System.out.println("[5] Terminate");
         System.out.println("********************************");
         System.out.println("Please select an option to continue: ");
-        String s = SC.nextLine().trim();
-        if (s.length() != 1 || s.charAt(0) < '1' || s.charAt(0) > '5') {
-            System.out.println(red + "Invalid choice. Please select 1-5." + reset);
-            System.out.println(yellow + "Press ENTER to continue..." + reset);
-            SC.nextLine();
-            clearScreen();
-            continue;
-        }
-        int choice = s.charAt(0) - '0';
-
+        int choice = readInt(SC,1,5);
+        
         switch (choice) {
             case 1:
-                subMenuOptionA();
+                subMenuOption1();
                 break;
             case 2:
-                subMenuOptionB();
+                subMenuOption2();
                 break;
             case 3:
-                subMenuOptionC();
+                subMenuOption3();
                 break;
             case 4:
-                subMenuOptionD();
+                subMenuOption4();
                 break;
             case 5:
                 System.out.println(green+"\nTurning the program off...");
@@ -91,16 +76,31 @@ reset);
         clearScreen();
       }
     }
-private static int readInt(Scanner scan) {
+private static int readInt(Scanner scan, int min, int max) {
     while (true) {
-        String input = scan.nextLine().trim();  // kullanıcı ne yazdıysa oku
-        try {
-            return Integer.parseInt(input);   // sayıya çevir, başarılıysa dön
-        } catch (NumberFormatException e) {
-            System.out.print("Invalid integer. Try again: "); // hata -> yeniden sor
+        String s = scan.nextLine().trim();  
+                if (!s.matches("\\d+")) {
+            System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+            continue;
         }
+
+        int val;
+        try {
+            val = Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+            continue;
+        }
+
+        if (val < min || val > max) {
+            System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+            continue;
+        }
+
+        return val;
     }
 }
+
 
     /* Optional helpers for menu I/O (no implementation yet) */
     private static void clearScreen() {
@@ -113,7 +113,7 @@ private static int readInt(Scanner scan) {
      * ============================= */
 
     // Age and Zodiac Sign Detection, Reverse the Words, and Return to Main Menu.
-    private static void subMenuOptionA() {
+    private static void subMenuOption1() {
         // TODO: Submenu loop for Option A
     }
 
@@ -164,7 +164,7 @@ private static int readInt(Scanner scan) {
      * ============================= */
 
     // Prime Numbers, Step by step Evaluation of Expression, and Return to Main Menu.
-    private static void subMenuOptionB() {
+    private static void subMenuOption2() {
         // TODO: Submenu loop for Option B
     }
 
@@ -203,7 +203,7 @@ private static int readInt(Scanner scan) {
      * ============================= */
 
     // Statistical Information about an Array, Distance between Two Arrays, and Return to Main Menu.
-    private static void subMenuOptionC() {
+    private static void subMenuOption3() {
         // TODO: Submenu loop for Option C
     }
 
@@ -244,7 +244,7 @@ private static int readInt(Scanner scan) {
      * ============================= */
 
     // (Stubs only; implement later)
-    private static void subMenuOptionD() {
+    private static void subMenuOption4() {
         // TODO: Board size (5x4, 6x5, 7x6) and mode (1P vs CPU / 2P)
     }
 
