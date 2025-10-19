@@ -1,12 +1,14 @@
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
 
-    /* =============================
-     *  Welcome & Main Menu TestBORAG
-     * ============================= */
+    /*
+     * =============================
+     * Welcome & Main Menu
+     * =============================
+     */
     private static final java.util.Scanner SC = new java.util.Scanner(System.in);
     private static String cyan = "\u001B[36m";
     private static String yellow = "\u001B[33m";
@@ -17,128 +19,420 @@ public class Main {
     private static void welcomeMessage() {
         clearScreen();
 
-    System.out.println(yellow +
-" █████   ███   █████          ████                                        \n" +
-"░░███   ░███  ░░███          ░░███                                        \n" +
-" ░███   ░███   ░███   ██████  ░███   ██████   ██████  █████████████    ██████  \n" +
-" ░███   ░███   ░███  ███░░███ ░███  ███░░███ ███░░███░░███░░███░░███  ███░░███ \n" +
-" ░░███  █████  ███  ░███████  ░███ ░███ ░░░ ░███ ░███ ░███ ░███ ░███ ░███████  \n" +
-"  ░░░█████░█████░   ░███░░░   ░███ ░███  ███░███ ░███ ░███ ░███ ░███ ░███░░░   \n" +
-"    ░░███ ░░███     ░░██████  █████░░██████ ░░██████  █████░███ █████░░██████  \n" +
-"     ░░░   ░░░       ░░░░░░  ░░░░░  ░░░░░░   ░░░░░░  ░░░░░ ░░░ ░░░░░  ░░░░░░   \n" +
-reset);
+        System.out.println(yellow +
+                " █████   ███   █████          ████                                        \n" +
+                "░░███   ░███  ░░███          ░░███                                        \n" +
+                " ░███   ░███   ░███   ██████  ░███   ██████   ██████  █████████████    ██████  \n" +
+                " ░███   ░███   ░███  ███░░███ ░███  ███░░███ ███░░███░░███░░███░░███  ███░░███ \n" +
+                " ░░███  █████  ███  ░███████  ░███ ░███ ░░░ ░███ ░███ ░███ ░███ ░███ ░███████  \n" +
+                "  ░░░█████░█████░   ░███░░░   ░███ ░███  ███░███ ░███ ░███ ░███ ░███ ░███░░░   \n" +
+                "    ░░███ ░░███     ░░██████  █████░░██████ ░░██████  █████░███ █████░░██████  \n" +
+                "     ░░░   ░░░       ░░░░░░  ░░░░░  ░░░░░░   ░░░░░░  ░░░░░ ░░░ ░░░░░  ░░░░░░   \n" +
+                reset);
 
-    System.out.println(green + "Welcome to CMPE343 Project 1" + reset);
-    System.out.println(green + "-----------------------------------------------" + reset);
-    System.out.println(green + "Group Members:" + reset);
-    System.out.println(cyan + " - Bora Görgün"+ reset);
-    System.out.println(cyan + " - [Member 2]"+ reset);
-    System.out.println(cyan + " - [Member 3]"+ reset);
-    System.out.println(cyan + " - [Member 4]"+ reset);
-    System.out.println();
-    System.out.println(yellow + "Press ENTER to continue..." + reset);
+        System.out.println(green + "Welcome to CMPE343 Project 1" + reset);
+        System.out.println(green + "-----------------------------------------------" + reset);
+        System.out.println(green + "Group Members:" + reset);
+        System.out.println(cyan + " - Bora Görgün" + reset);
+        System.out.println(cyan + " - [Member 2]" + reset);
+        System.out.println(cyan + " - [Member 3]" + reset);
+        System.out.println(cyan + " - [Member 4]" + reset);
+        System.out.println();
+        System.out.println(yellow + "Press ENTER to continue..." + reset);
 
-    SC.nextLine();
-    clearScreen();
+        SC.nextLine();
+        clearScreen();
     }
 
     private static void mainMenu() {
-       while(true)
-       {
-        System.out.println("********************************");
-        System.out.println("[1] Primary School");
-        System.out.println("[2] Secondary School");
-        System.out.println("[3] High Schooll");
-        System.out.println("[4] University");
-        System.out.println("[5] Terminate");
-        System.out.println("********************************");
-        System.out.println("Please select an option to continue: ");
-        int choice = readInt(SC,1,5);
-        
-        switch (choice) {
-            case 1:
-                subMenuOption1();
-                break;
-            case 2:
-                subMenuOption2();
-                break;
-            case 3:
-                subMenuOption3();
-                break;
-            case 4:
-                subMenuOption4();
-                break;
-            case 5:
-                System.out.println(green+"\nTurning the program off...");
-                System.out.println(red+"Thank you for using our program!");
-                return; 
+        while (true) {
+            System.out.println(red+"********************************"+reset);
+            System.out.println(cyan+"[1] Primary School"+reset);
+            System.out.println(cyan+"[2] Secondary School"+reset);
+            System.out.println(cyan+"[3] High Schooll"+reset);
+            System.out.println(cyan+"[4] University"+reset);
+            System.out.println(cyan+"[5] Terminate"+reset);
+            System.out.println(red+"********************************"+reset);
+            System.out.println(green+"Please select an option to continue: "+reset);
+            int choice = readInt(SC, 1, 5);
+
+            switch (choice) {
+                case 1:
+                    subMenuOption1();
+                    break;
+                case 2:
+                    subMenuOption2();
+                    break;
+                case 3:
+                    subMenuOption3();
+                    break;
+                case 4:
+                    subMenuOption4();
+                    break;
+                case 5:
+                    System.out.println(green + "\nTurning the program off...");
+                    System.out.println(red + "Thank you for using our program!");
+                    return;
+            }
+            clearScreen();
         }
-        clearScreen();
-      }
     }
-private static int readInt(Scanner scan, int min, int max) {
-    while (true) {
-        String s = scan.nextLine().trim();  
-                if (!s.matches("\\d+")) {
-            System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
-            continue;
-        }
 
-        int val;
-        try {
-            val = Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
-            continue;
-        }
+    private static int readInt(Scanner scan, int min, int max) {
+        while (true) {
+            String s = scan.nextLine().trim();
+            if (!s.matches("\\d+")) {
+                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+                continue;
+            }
 
-        if (val < min || val > max) {
-            System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
-            continue;
-        }
+            int val;
+            try {
+                val = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+                continue;
+            }
 
-        return val;
+            if (val < min || val > max) {
+                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+                continue;
+            }
+
+            return val;
+        }
     }
-}
-
 
     /* Optional helpers for menu I/O (no implementation yet) */
     private static void clearScreen() {
-           System.out.print("\033[H\033[2J");
-    System.out.flush();
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
-    /* =============================
-     *  Option A — Primary School
-     * ============================= */
-
-    // Age and Zodiac Sign Detection, Reverse the Words, and Return to Main Menu.
+    /*
+     * =============================
+     * Option A — Primary School
+     * =============================
+     */
     private static void subMenuOption1() {
-        // TODO: Submenu loop for Option A
+        System.out.println("");
+         while (true) {
+            System.out.println(red+"********************************"+reset);
+            System.out.println(cyan+"[1] Calculate Age and Zodiac Sign"+reset);
+            System.out.println(cyan+"[2] Reverse the Words"+reset);
+            System.out.println(cyan+"[3] Terminate"+reset);
+            System.out.println(red+"********************************"+reset);
+            System.out.println(green+"Please select an option to continue: "+reset);
+            int choice = readInt(SC, 1, 3);
+
+            switch (choice) {
+                case 1:
+                    ageAndZodiacSignDetection();
+                    break;
+                case 2:
+                    reverseTheWords();
+                    break;
+                case 3:
+                    System.out.println(green + "\nReturning the main menu."+reset);
+                    return;
+            }
+            clearScreen();
+        }
+
     }
 
-    /* Option A — Task 1: Age and Zodiac Sign Detection */
-
-    // Main function of Option A Task 1. Print age and zodiac.
     private static void ageAndZodiacSignDetection() {
-        // TODO: Orchestrate input, calculations, and formatted output
+        System.out.print(yellow + "Please enter your year of birth: " + reset);
+        int birthYear = getYear(SC);
+
+        System.out.print(yellow + "Please enter your month of birth (1-12): " + reset);
+        int birthMonth = getMonth(SC);
+
+        System.out.print(yellow + "Please enter your day of birth: " + reset);
+        int birthDay = getDay(SC, birthMonth, birthYear);
+
+        int currentYear = getCurrentYear();
+        int currentMonth = getCurrentMonth();
+        int currentDay = getCurrentDay();
+
+        int years = currentYear - birthYear;
+        int months = currentMonth - birthMonth;
+        int days = currentDay - birthDay;
+
+        int tempMonth = currentMonth;
+        int tempYear = currentYear;
+
+        while (days < 0) {
+            
+            int prevMonth = tempMonth - 1;
+            int prevYear = tempYear;
+            if (prevMonth == 0) {
+                prevMonth = 12;
+                prevYear -= 1;
+            }
+            int dim = getDaysInMonth(prevMonth, prevYear);
+
+            days += dim; 
+            months -= 1; 
+
+            
+            tempMonth = prevMonth;
+            tempYear = prevYear;
+        }
+
+        
+        if (months < 0) {
+            years -= 1;
+            months += 12;
+        }
+
+        System.out.println(cyan + "Your age: " + years + " years, " + months + " months, " + days + " days" + reset);
+        System.out.println(red + "Your zodiac sign is " + getZodiacString(birthDay, birthMonth) + "." + reset);
+        if(birthYear<=1500)
+        {
+            System.out.println(red + " Wow... You must be a time traveler! " + reset);
+            System.out.println(yellow + "Are you sure you were born in " + birthYear + "?" + reset);
+        }
+        System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
+        SC.nextLine();
     }
 
-    // Get date of birth from user using java.util.Scanner.
-    private static int getDay() { return 0; }
-    private static int getMonth() { return 0; }
-    private static int getYear() { return 0; }
+    private static String getZodiacString(int day, int month) {
+        if ((month == 3 && day >= 21) || (month == 4 && day <= 19))
+            return "Aries";
+        if ((month == 4 && day >= 20) || (month == 5 && day <= 20))
+            return "Taurus";
+        if ((month == 5 && day >= 21) || (month == 6 && day <= 20))
+            return "Gemini";
+        if ((month == 6 && day >= 21) || (month == 7 && day <= 22))
+            return "Cancer";
+        if ((month == 7 && day >= 23) || (month == 8 && day <= 22))
+            return "Leo";
+        if ((month == 8 && day >= 23) || (month == 9 && day <= 22))
+            return "Virgo";
+        if ((month == 9 && day >= 23) || (month == 10 && day <= 22))
+            return "Libra";
+        if ((month == 10 && day >= 23) || (month == 11 && day <= 21))
+            return "Scorpio";
+        if ((month == 11 && day >= 22) || (month == 12 && day <= 21))
+            return "Sagittarius";
+        if ((month == 12 && day >= 22) || (month == 1 && day <= 19))
+            return "Capricorn";
+        if ((month == 1 && day >= 20) || (month == 2 && day <= 18))
+            return "Aquarius";
+        if ((month == 2 && day >= 19) || (month == 3 && day <= 20))
+            return "Pisces";
+        return "Unknown";
+    }
 
-    // Get current date using java.util.Calendar package.
-    private static int getCurrentDay() { return 0; }
-    private static int getCurrentMonth() { return 0; }
-    private static int getCurrentYear() { return 0; }
+    private static int getDaysInMonth(int month, int year) {
 
-    // Calculate age with parameters that are day, month and year.
-    private static int calculateAge(String day, String month, String year) { return 0; }
+        if (month == 2) {
+            if (IsLeapYear(year))
+                return 29;
+            return 28;
+        } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+            return 30;
+        } else {
+            return 31;
+        }
+    }
 
-    // Calculate zodiac with parameters that are day, month and year.
-    private static String calculateZodiac(String day, String month, String year) { return ""; }
+    private static boolean IsLeapYear(int year) {
+        if ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0))
+            return true;
+
+        return false;
+    }
+
+    private static int getDay(Scanner scan) {
+        while (true) {
+            int currentMonth = getCurrentMonth();
+            int currentYear = getCurrentYear();
+
+            String s = scan.nextLine().trim();
+            if (s.length() > 1 && s.charAt(0) == '0') {
+                System.out.println(red + "Leading zeros are not allowed for day." + reset);
+                System.out.print(red + "Please enter your day of birth: " + reset);
+                continue;
+            }
+            if (!s.matches("\\d+")) {
+                System.out.println(red + "Your day of birth must contain digits only." + reset);
+                System.out.print(red + "Please enter your day of birth: " + reset);
+                continue;
+            }
+
+            int val;
+            try {
+                val = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.out.println(red + "Invalid day value (number too large)." + reset);
+                System.out.print(red + "Please enter your day of birth: " + reset);
+                continue;
+            }
+            if (currentMonth == 2) {
+                int max = 0;
+                if (IsLeapYear(currentYear))
+                    max = 29;
+                else
+                    max = 28;
+
+                if (val <= 0 || val > max) {
+                    System.out.println(red + "Your day of birth must be between 1 - " + max + "." + reset);
+                    System.out.print(red + "Please enter your day of birth: " + reset);
+                    continue;
+                }
+            } else if (currentMonth == 4 || currentMonth == 6 || currentMonth == 9 || currentMonth == 11) {
+                if (val <= 0 || val > 30) {
+                    System.out.println(red + "Your day of birth must be between 1 - 30." + reset);
+                    System.out.print(red + "Please enter your day of birth: " + reset);
+                    continue;
+                }
+            } else {
+                if (val <= 0 || val > 31) {
+                    System.out.println(red + "Your day of birth must be between 1 - 31." + reset);
+                    System.out.print(red + "Please enter your day of birth: " + reset);
+                    continue;
+                }
+            }
+            return val;
+        }
+
+    }
+
+    // Day validator using provided birth month/year (prevents dates like 31/04)
+    private static int getDay(Scanner scan, int month, int year) {
+        while (true) {
+            String s = scan.nextLine().trim();
+            if (s.length() > 1 && s.charAt(0) == '0') {
+                System.out.println(red + "Leading zeros are not allowed for day." + reset);
+                System.out.print(red + "Please enter your day of birth: " + reset);
+                continue;
+            }
+            if (!s.matches("\\d+")) {
+                System.out.println(red + "Your day of birth must contain digits only." + reset);
+                System.out.print(red + "Please enter your day of birth: " + reset);
+                continue;
+            }
+
+            int val;
+            try {
+                val = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.out.println(red + "Invalid day value (number too large)." + reset);
+                System.out.print(red + "Please enter your day of birth: " + reset);
+                continue;
+            }
+
+            int max;
+            if (month == 2) {
+                max = IsLeapYear(year) ? 29 : 28;
+            } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+                max = 30;
+            } else {
+                max = 31;
+            }
+
+            if (val <= 0 || val > max) {
+                System.out.println(red + "Your day of birth must be between 1 - " + max + "." + reset);
+                System.out.print(red + "Please enter your day of birth: " + reset);
+                continue;
+            }
+
+            return val;
+        }
+    }
+
+    private static int getMonth(Scanner scan) {
+        while (true) {
+
+            String s = scan.nextLine().trim();
+            if (s.length() > 1 && s.charAt(0) == '0') {
+                System.out.println(red + "Leading zeros are not allowed for month." + reset);
+                System.out.print(red + "Please enter your month of birth: " + reset);
+                continue;
+            }
+            if (!s.matches("\\d+")) {
+                System.out.println(red + "Your month of birth must contain digits only." + reset);
+                System.out.print(red + "Please enter your month of birth: " + reset);
+                continue;
+            }
+
+            int val;
+            try {
+                val = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.out.println(red + "Invalid month value (number too large)." + reset);
+                System.out.print(red + "Please enter your month of birth: " + reset);
+
+                continue;
+            }
+
+            if (val <= 0 || val > 12) {
+                System.out.println(red + "Your month of birth must be between 1 - 12." + reset);
+                System.out.print(red + "Please enter your month of birth: " + reset);
+                continue;
+            }
+
+            return val;
+        }
+    }
+
+    private static int getYear(Scanner scan) {
+        while (true) {
+
+            int currentYear = getCurrentYear();
+            String s = scan.nextLine().trim();
+            if (s.length() > 1 && s.charAt(0) == '0') {
+                System.out.println(red + "Leading zeros are not allowed for year." + reset);
+                System.out.print(red + "Please enter your year of birth: " + reset);
+                continue;
+            }
+            if (!s.matches("\\d+")) {
+                System.out.println(red + "Your year of birth must contain digits only." + reset);
+                System.out.print(red + "Please enter your year of birth: " + reset);
+                continue;
+            }
+
+            int val;
+            try {
+                val = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.out.println(red + "Invalid year value (number too large)." + reset);
+                System.out.print(red + "Please enter your year of birth: " + reset);
+
+                continue;
+            }
+
+            if (val < 0) {
+                System.out.println(red + "Your year of birth cannot be negative." + reset);
+                System.out.print(red + "Please enter your year of birth: " + reset);
+                continue;
+            }
+
+            if (val > currentYear) {
+                System.out.println(red + "Your year of birth cannot be in the future (<= " + currentYear + ")." + reset);
+                System.out.print(red + "Please enter your year of birth: " + reset);
+                continue;
+            }
+
+            return val;
+        }
+    }
+
+
+    private static int getCurrentDay() {
+        return LocalDate.now().getDayOfMonth();
+    }
+
+    private static int getCurrentMonth() {
+        return LocalDate.now().getMonthValue();
+    }
+
+    private static int getCurrentYear() {
+        return LocalDate.now().getYear();
+    }
+
 
     /* Option A — Task 2: Reverse the Words (recursive) */
 
@@ -148,42 +442,67 @@ private static int readInt(Scanner scan, int min, int max) {
     }
 
     // Get text input from user with using java.util.Scanner and return it.
-    private static String getTextInput() { return ""; }
+    private static String getTextInput() {
+        return "";
+    }
 
     // After getting input from user, create reverse form and return it.
-    private static String createReverseOutput() { return ""; }
+    private static String createReverseOutput() {
+        return "";
+    }
 
     // If input length >= 2, it can be reversed.
-    private static boolean isReversed() { return true; }
+    private static boolean isReversed() {
+        return true;
+    }
 
     // Recursive helper for reversing a single word (no implementation)
-    private static String reverseWordRec(String s) { return ""; }
+    private static String reverseWordRec(String s) {
+        return "";
+    }
 
-    /* =============================
-     *  Option B — Secondary School
-     * ============================= */
+    /*
+     * =============================
+     * Option B — Secondary School
+     * =============================
+     */
 
-    // Prime Numbers, Step by step Evaluation of Expression, and Return to Main Menu.
+    // Prime Numbers, Step by step Evaluation of Expression, and Return to Main
+    // Menu.
     private static void subMenuOption2() {
         // TODO: Submenu loop for Option B
     }
 
     /* Option B — Task 1: Prime Numbers */
 
-    // Main function of Option B Task 1. Print first and last 3 prime numbers and execution times.
+    // Main function of Option B Task 1. Print first and last 3 prime numbers and
+    // execution times.
     private static void primeNumbers() {
         // TODO: Orchestrate n input, run sieves, measure times, print head/tail
     }
 
     // Get prime limit n from user using java.util.Scanner (n >= 12).
-    private static int getPrimeNumberInput() { return 0; }
+    private static int getPrimeNumberInput() {
+        return 0;
+    }
 
-    // Create an ArrayList and push all prime numbers then return it. Print execution time externally.
-    private static ArrayList<Integer> sieveOfEratosthenes() { return new ArrayList<>(); }
-    private static ArrayList<Integer> sieveOfSundaram() { return new ArrayList<>(); }
-    private static ArrayList<Integer> sieveOfAtkin() { return new ArrayList<>(); }
+    // Create an ArrayList and push all prime numbers then return it. Print
+    // execution time externally.
+    private static ArrayList<Integer> sieveOfEratosthenes() {
+        return new ArrayList<>();
+    }
 
-    /* Option B — Task 2: Step-by-step Evaluation of Expression (recursive stages) */
+    private static ArrayList<Integer> sieveOfSundaram() {
+        return new ArrayList<>();
+    }
+
+    private static ArrayList<Integer> sieveOfAtkin() {
+        return new ArrayList<>();
+    }
+
+    /*
+     * Option B — Task 2: Step-by-step Evaluation of Expression (recursive stages)
+     */
 
     // Main function of Option B Task 2.
     private static void evaluationOfExpression() {
@@ -191,18 +510,27 @@ private static int readInt(Scanner scan, int min, int max) {
     }
 
     // Get expression input from user with using java.util.Scanner.
-    private static String getExpressionInput() { return ""; }
+    private static String getExpressionInput() {
+        return "";
+    }
 
     // Check valid expression or not.
-    private static boolean isValidExpression() { return false; }
+    private static boolean isValidExpression() {
+        return false;
+    }
 
-    private static int calculateExpression(String expression) { return 0; }
+    private static int calculateExpression(String expression) {
+        return 0;
+    }
 
-    /* =============================
-     *  Option C — High School
-     * ============================= */
+    /*
+     * =============================
+     * Option C — High School
+     * =============================
+     */
 
-    // Statistical Information about an Array, Distance between Two Arrays, and Return to Main Menu.
+    // Statistical Information about an Array, Distance between Two Arrays, and
+    // Return to Main Menu.
     private static void subMenuOption3() {
         // TODO: Submenu loop for Option C
     }
@@ -214,13 +542,29 @@ private static int readInt(Scanner scan, int min, int max) {
         // TODO: Read size/elements, compute and print median/means
     }
 
-    private static int arraySize() { return 0; }
-    private static ArrayList<Integer> getElement() { return new ArrayList<>(); }
+    private static int arraySize() {
+        return 0;
+    }
 
-    private static double calculateMedian() { return 0.0; }
-    private static double calculateArithmeticMedian() { return 0.0; }
-    private static double calculateGeometricMedian() { return 0.0; }
-    private static double calculateHarmonicMedian() { return 0.0; } // !!! Should be computed recursively
+    private static ArrayList<Integer> getElement() {
+        return new ArrayList<>();
+    }
+
+    private static double calculateMedian() {
+        return 0.0;
+    }
+
+    private static double calculateArithmeticMedian() {
+        return 0.0;
+    }
+
+    private static double calculateGeometricMedian() {
+        return 0.0;
+    }
+
+    private static double calculateHarmonicMedian() {
+        return 0.0;
+    } // !!! Should be computed recursively
 
     /* Option C — Task 2: Distance between Two Arrays */
 
@@ -230,18 +574,32 @@ private static int readInt(Scanner scan, int min, int max) {
     }
 
     // Get dimension from user with using java.util.Scanner.
-    private static int getDimension() { return 0; }
+    private static int getDimension() {
+        return 0;
+    }
 
     // Check entered dimension is valid or not.
-    private static boolean isValidDimension() { return false; }
+    private static boolean isValidDimension() {
+        return false;
+    }
 
-    private static int calculateManhattanDistance() { return 0; }
-    private static int calculateEuclideanDistance() { return 0; }
-    private static int calculateCosineSimilarity() { return 0; }
+    private static int calculateManhattanDistance() {
+        return 0;
+    }
 
-    /* =============================
-     *  Option D — University (Connect Four)
-     * ============================= */
+    private static int calculateEuclideanDistance() {
+        return 0;
+    }
+
+    private static int calculateCosineSimilarity() {
+        return 0;
+    }
+
+    /*
+     * =============================
+     * Option D — University (Connect Four)
+     * =============================
+     */
 
     // (Stubs only; implement later)
     private static void subMenuOption4() {
@@ -264,12 +622,19 @@ private static int readInt(Scanner scan, int min, int max) {
         // TODO: Random/AI move (Minimax/Alpha-Beta optional)
     }
 
-    private static boolean checkWin() { return false; }
-    private static boolean checkDraw() { return false; }
+    private static boolean checkWin() {
+        return false;
+    }
 
-    /* =============================
-     *  Program Entry Point
-     * ============================= */
+    private static boolean checkDraw() {
+        return false;
+    }
+
+    /*
+     * =============================
+     * Program Entry Point
+     * =============================
+     */
 
     public static void main(String[] args) {
         // TODO: Wire everything together
@@ -277,7 +642,7 @@ private static int readInt(Scanner scan, int min, int max) {
         // welcomeMessage();
         // mainMenu();
 
-         welcomeMessage();
-         mainMenu();
+        welcomeMessage();
+        mainMenu();
     }
 }
