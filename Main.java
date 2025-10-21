@@ -1,247 +1,424 @@
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
 
-    /* =============================
-     *  Welcome & Main Menu TestBORAG
-     * ============================= */
+    // ====== Console UI (colors) & Scanner ======
+    private static final Scanner SC = new Scanner(System.in).useLocale(Locale.US);
+    private static final String cyan = "\u001B[36m";
+    private static final String yellow = "\u001B[33m";
+    private static final String green = "\u001B[32m";
+    private static final String reset = "\u001B[0m";
+    private static final String red = "\u001B[31m";
 
-    private static void welcomeMessage() {
-           clearScreen();
+    private static final String BUILD_TAG = "BUILD-2025-10-21-TR"; // görsel kanıt
 
-    String cyan = "\u001B[36m";
-    String yellow = "\u001B[33m";
-    String green = "\u001B[32m";
-    String reset = "\u001B[0m";
+    // ====== Shared data for Option C - Task 1 ======
+    private static ArrayList<Double> arrC = new ArrayList<>();
 
-    System.out.println(yellow +
-" █████   ███   █████          ████                                        \n" +
-"░░███   ░███  ░░███          ░░███                                        \n" +
-" ░███   ░███   ░███   ██████  ░███   ██████   ██████  █████████████    ██████  \n" +
-" ░███   ░███   ░███  ███░░███ ░███  ███░░███ ███░░███░░███░░███░░███  ███░░███ \n" +
-" ░░███  █████  ███  ░███████  ░███ ░███ ░░░ ░███ ░███ ░███ ░███ ░███ ░███████  \n" +
-"  ░░░█████░█████░   ░███░░░   ░███ ░███  ███░███ ░███ ░███ ░███ ░███ ░███░░░   \n" +
-"    ░░███ ░░███     ░░██████  █████░░██████ ░░██████  █████░███ █████░░██████  \n" +
-"     ░░░   ░░░       ░░░░░░  ░░░░░  ░░░░░░   ░░░░░░  ░░░░░ ░░░ ░░░░░  ░░░░░░   \n" +
-reset);
-
-    System.out.println(green + "Welcome to CMPE343 Project 1" + reset);
-    System.out.println(green + "-----------------------------------------------" + reset);
-    System.out.println(green + "Group Members:" + reset);
-    System.out.println(cyan + " - Bora Görgün"+ reset);
-    System.out.println(cyan + " - [Member 2]"+ reset);
-    System.out.println(cyan + " - [Member 3]"+ reset);
-    System.out.println(cyan + " - [Member 4]"+ reset);
-    System.out.println();
-    System.out.println(yellow + "Press ENTER to continue..." + reset);
-
-    new Scanner(System.in).nextLine();
-    clearScreen();
-    }
-
-    /*
-        [A] Primary School
-        [B] Secondary School
-        [C] High School
-        [D] University
-        [E] Terminate
-    */
-    private static void mainMenu() {
-        // TODO: Show main menu, read user choice, route to sub-menus
-    }
-
-    /* Optional helpers for menu I/O (no implementation yet) */
-    private static void clearScreen() {
-           System.out.print("\033[H\033[2J");
-    System.out.flush();
-    }
-
-    private static char readMenuChoice(Scanner sc) {
-        // TODO: Read a single non-empty character and return uppercase
-        return 'E';
-    }
-
-    private static int readInt(Scanner sc) {
-        // TODO: Safe integer input with retry
-        return 0;
-    }
-
-    private static String readLine(Scanner sc) {
-        // TODO: Safe full-line input
-        return "";
-    }
-
-    /* =============================
-     *  Option A — Primary School
-     * ============================= */
-
-    // Age and Zodiac Sign Detection, Reverse the Words, and Return to Main Menu.
-    private static void subMenuOptionA() {
-        // TODO: Submenu loop for Option A
-    }
-
-    /* Option A — Task 1: Age and Zodiac Sign Detection */
-
-    // Main function of Option A Task 1. Print age and zodiac.
-    private static void ageAndZodiacSignDetection() {
-        // TODO: Orchestrate input, calculations, and formatted output
-    }
-
-    // Get date of birth from user using java.util.Scanner.
-    private static int getDay() { return 0; }
-    private static int getMonth() { return 0; }
-    private static int getYear() { return 0; }
-
-    // Get current date using java.util.Calendar package.
-    private static int getCurrentDay() { return 0; }
-    private static int getCurrentMonth() { return 0; }
-    private static int getCurrentYear() { return 0; }
-
-    // Calculate age with parameters that are day, month and year.
-    private static int calculateAge(String day, String month, String year) { return 0; }
-
-    // Calculate zodiac with parameters that are day, month and year.
-    private static String calculateZodiac(String day, String month, String year) { return ""; }
-
-    /* Option A — Task 2: Reverse the Words (recursive) */
-
-    // Main function of Option A Task 2. Print reversed word.
-    private static void reverseTheWords() {
-        // TODO: Orchestrate input, recursion, and output
-    }
-
-    // Get text input from user with using java.util.Scanner and return it.
-    private static String getTextInput() { return ""; }
-
-    // After getting input from user, create reverse form and return it.
-    private static String createReverseOutput() { return ""; }
-
-    // If input length >= 2, it can be reversed.
-    private static boolean isReversed() { return true; }
-
-    // Recursive helper for reversing a single word (no implementation)
-    private static String reverseWordRec(String s) { return ""; }
-
-    /* =============================
-     *  Option B — Secondary School
-     * ============================= */
-
-    // Prime Numbers, Step by step Evaluation of Expression, and Return to Main Menu.
-    private static void subMenuOptionB() {
-        // TODO: Submenu loop for Option B
-    }
-
-    /* Option B — Task 1: Prime Numbers */
-
-    // Main function of Option B Task 1. Print first and last 3 prime numbers and execution times.
-    private static void primeNumbers() {
-        // TODO: Orchestrate n input, run sieves, measure times, print head/tail
-    }
-
-    // Get prime limit n from user using java.util.Scanner (n >= 12).
-    private static int getPrimeNumberInput() { return 0; }
-
-    // Create an ArrayList and push all prime numbers then return it. Print execution time externally.
-    private static ArrayList<Integer> sieveOfEratosthenes() { return new ArrayList<>(); }
-    private static ArrayList<Integer> sieveOfSundaram() { return new ArrayList<>(); }
-    private static ArrayList<Integer> sieveOfAtkin() { return new ArrayList<>(); }
-
-    /* Option B — Task 2: Step-by-step Evaluation of Expression (recursive stages) */
-
-    // Main function of Option B Task 2.
-    private static void evaluationOfExpression() {
-        // TODO: Read expression, validate, recursively reduce and print each stage
-    }
-
-    // Get expression input from user with using java.util.Scanner.
-    private static String getExpressionInput() { return ""; }
-
-    // Check valid expression or not.
-    private static boolean isValidExpression() { return false; }
-
-    private static int calculateExpression(String expression) { return 0; }
-
-    /* =============================
-     *  Option C — High School
-     * ============================= */
-
-    // Statistical Information about an Array, Distance between Two Arrays, and Return to Main Menu.
-    private static void subMenuOptionC() {
-        // TODO: Submenu loop for Option C
-    }
-
-    /* Option C — Task 1: Statistical Information about an Array */
-
-    // Main function of Option C Task 1. Print all calculations.
-    private static void statisticalInformation() {
-        // TODO: Read size/elements, compute and print median/means
-    }
-
-    private static int arraySize() { return 0; }
-    private static ArrayList<Integer> getElement() { return new ArrayList<>(); }
-
-    private static double calculateMedian() { return 0.0; }
-    private static double calculateArithmeticMedian() { return 0.0; }
-    private static double calculateGeometricMedian() { return 0.0; }
-    private static double calculateHarmonicMedian() { return 0.0; } // !!! Should be computed recursively
-
-    /* Option C — Task 2: Distance between Two Arrays */
-
-    // Main function of Option C Task 2. Print all calculations.
-    private static void distanceBetweenTwoArrays() {
-        // TODO: Read dimension & arrays (0-9), compute Manhattan/Euclidean/Cosine
-    }
-
-    // Get dimension from user with using java.util.Scanner.
-    private static int getDimension() { return 0; }
-
-    // Check entered dimension is valid or not.
-    private static boolean isValidDimension() { return false; }
-
-    private static int calculateManhattanDistance() { return 0; }
-    private static int calculateEuclideanDistance() { return 0; }
-    private static int calculateCosineSimilarity() { return 0; }
-
-    /* =============================
-     *  Option D — University (Connect Four)
-     * ============================= */
-
-    // (Stubs only; implement later)
-    private static void subMenuOptionD() {
-        // TODO: Board size (5x4, 6x5, 7x6) and mode (1P vs CPU / 2P)
-    }
-
-    private static void startConnectFour() {
-        // TODO: Main game loop, render board each move
-    }
-
-    private static void renderBoard() {
-        // TODO: Print the board to console
-    }
-
-    private static void makeMovePlayer() {
-        // TODO: Player move with column validation
-    }
-
-    private static void makeMoveCPU() {
-        // TODO: Random/AI move (Minimax/Alpha-Beta optional)
-    }
-
-    private static boolean checkWin() { return false; }
-    private static boolean checkDraw() { return false; }
-
-    /* =============================
-     *  Program Entry Point
-     * ============================= */
-
+    // =============================
+    // Program Entry Point
+    // =============================
     public static void main(String[] args) {
-        // TODO: Wire everything together
-        // Example flow (keep empty if you prefer):
-        // welcomeMessage();
-        // mainMenu();
+        welcomeMessage();
+        mainMenu();
+    }
 
-         welcomeMessage();
+    // ====== Welcome & Main Menu ======
+    private static void welcomeMessage() {
+        clearScreen();
+        System.out.println(yellow +
+                " █████   ███   █████          ████                                        \n" +
+                "░░███   ░███  ░░███          ░░███                                        \n" +
+                " ░███   ░███   ░███   ██████  ░███   ██████   ██████  █████████████    ██████  \n" +
+                " ░███   ░███   ░███  ███░░███ ░███  ███░░███ ███░░███░░███░░███░░███  ███░░███ \n" +
+                " ░░███  █████  ███  ░███████  ░███ ░███ ░░░ ░███ ░███ ░███ ░███ ░███ ░███████  \n" +
+                "  ░░░█████░█████░   ░███░░░   ░███ ░███  ███░███ ░███ ░███ ░███ ░███ ░███░░░   \n" +
+                "    ░░███ ░░███     ░░██████  █████░░██████ ░░██████  █████░███ █████░░██████  \n" +
+                "     ░░░   ░░░       ░░░░░░  ░░░░░  ░░░░░░   ░░░░░░  ░░░░░ ░░░ ░░░░░  ░░░░░░   \n" +
+                reset);
+        System.out.println(green + "Welcome to CMPE343 Project 1" + reset);
+        System.out.println(green + "-----------------------------------------------" + reset);
+        System.out.println(green + "Group Members:" + reset);
+        System.out.println(cyan + " - Bora Görgün" + reset);
+        System.out.println(cyan + " - Melek Sadiki" + reset);
+        System.out.println(cyan + " - [Member 3]" + reset);
+        System.out.println(cyan + " - [Member 4]" + reset);
+        System.out.println();
+        System.out.println(yellow + "Press ENTER to continue..." + reset);
+        SC.nextLine();
+        clearScreen();
+    }
+
+    private static void mainMenu() {
+        while (true) {
+            System.out.println(red + "********************************" + reset);
+            System.out.println(cyan + "[1] Primary School" + reset);
+            System.out.println(cyan + "[2] Secondary School" + reset);
+            System.out.println(cyan + "[3] High School" + reset);
+            System.out.println(cyan + "[4] University" + reset);
+            System.out.println(cyan + "[5] Terminate" + reset);
+            System.out.println(red + "********************************" + reset);
+            System.out.print(green + "Please select an option to continue: " + reset);
+
+            int choice = readInt(1, 5);
+            clearScreen();
+
+            switch (choice) {
+                case 1:
+                    subMenuOption1();
+                    break;
+                case 2:
+                    subMenuOption2();
+                    break;
+                case 3:
+                    subMenuOption3(); // FULL
+                    break;
+                case 4:
+                    subMenuOption4();
+                    break;
+                case 5:
+                    System.out.println(green + "\nTurning the program off...");
+                    System.out.println(red + "Thank you for using our program!" + reset);
+                    return;
+            }
+            clearScreen();
+        }
+    }
+
+    private static int readInt(int min, int max) {
+        while (true) {
+            String s = SC.nextLine().trim();
+            if (!s.matches("\\d+")) {
+                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+                continue;
+            }
+            try {
+                int val = Integer.parseInt(s);
+                if (val < min || val > max) {
+                    System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+                    continue;
+                }
+                return val;
+            } catch (NumberFormatException e) {
+                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+            }
+        }
+    }
+
+    private static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
+    // =============================
+    // Option A — Primary School (stubs)
+    // =============================
+    private static void subMenuOption1() {
+        System.out.println(yellow + "Option A is not implemented in this build." + reset);
+        System.out.println(yellow + "Press ENTER to return to main menu..." + reset);
+        SC.nextLine();
+    }
+
+    // =============================
+    // Option B — Secondary School (stubs)
+    // =============================
+    private static void subMenuOption2() {
+        System.out.println(yellow + "Option B is not implemented in this build." + reset);
+        System.out.println(yellow + "Press ENTER to return to main menu..." + reset);
+        SC.nextLine();
+    }
+
+    // =============================
+    // Option C — High School (FULL)
+    // =============================
+    private static void subMenuOption3() {
+        while (true) {
+            System.out.println(red + "********************************" + reset);
+            System.out.println(cyan + "[1] Statistical Information about an Array" + reset);
+            System.out.println(cyan + "[2] Distance between Two Arrays" + reset);
+            System.out.println(cyan + "[3] Terminate" + reset);
+            System.out.println(red + "********************************" + reset);
+            System.out.print(green + "Please select an option to continue: " + reset);
+
+            int choice = readInt(1, 3);
+            clearScreen();
+
+            switch (choice) {
+                case 1:
+                    statisticalInformation();
+                    break;
+                case 2:
+                    distanceBetweenTwoArrays();
+                    break;
+                case 3:
+                    System.out.println(green + "\nReturning the main menu." + reset);
+                    System.out.println(yellow + "Press ENTER..." + reset);
+                    SC.nextLine();
+                    return;
+            }
+            clearScreen();
+        }
+    }
+
+    // ---------- Option C — Task 1: Statistical Information ----------
+    private static void statisticalInformation() {
+        arrC.clear();
+        System.out.println(yellow + "=== Statistical Information about an Array ===" + reset);
+        int n = arraySize();
+
+        System.out.println(cyan + "Enter " + n + " real numbers (space/newline separated). For decimals you can use ',' or '.':" + reset);
+
+        // Fazla girilen token'ları uyarı olarak gösteren okuma bloğu
+        while (arrC.size() < n) {
+            String line = SC.nextLine().trim();
+            if (line.isEmpty()) continue;
+
+            String[] toks = line.split("\\s+");
+            int j = 0;
+
+            for (; j < toks.length; j++) {
+                if (arrC.size() >= n) break;
+                String t = toks[j];
+                String norm = t.replace(',', '.');
+                try {
+                    double v = Double.parseDouble(norm);
+                    arrC.add(v);
+                } catch (NumberFormatException ex) {
+                    System.out.println(red + "Invalid number: " + t + ". Please continue entering the remaining values." + reset);
+                }
+            }
+
+            // Eğer bu satırda hedefe ulaşıldı ve hâlâ fazla token varsa uyar
+            if (arrC.size() >= n && j < toks.length) {
+                String[] extras = Arrays.copyOfRange(toks, j, toks.length);
+                System.out.println(
+                    red + "Warning: You entered " + extras.length +
+                    " extra value(s) beyond the expected " + n + ". They were ignored: " +
+                    String.join(" ", extras) + reset
+                );
+            }
+        }
+
+        double median = calculateMedian();
+        double arithmetic = calculateArithmeticMean();
+        double geometric = calculateGeometricMean();
+        double harmonic = calculateHarmonicMean();
+
+        System.out.println(green + "\nResults:" + reset);
+        System.out.printf(cyan + "Median:             " + reset + "%.6f%n", median);
+        System.out.printf(cyan + "Arithmetic mean:    " + reset + "%.6f%n", arithmetic);
+        if (Double.isNaN(geometric)) {
+            System.out.println(cyan + "Geometric mean:     " + reset + red + "undefined for non-positive elements" + reset);
+        } else {
+            System.out.printf(cyan + "Geometric mean:     " + reset + "%.6f%n", geometric);
+        }
+        if (Double.isNaN(harmonic)) {
+            System.out.println(cyan + "Harmonic mean:      " + reset + red + "undefined when element is 0" + reset);
+        } else {
+            System.out.printf(cyan + "Harmonic mean:      " + reset + "%.6f%n", harmonic);
+        }
+
+        System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
+        SC.nextLine();
+    }
+
+    private static int arraySize() {
+        System.out.print(yellow + "Enter array size (n >= 1): " + reset);
+        while (true) {
+            String s = SC.nextLine().trim();
+            if (!s.matches("\\d+")) {
+                System.out.print(red + "Please enter a positive integer (>=1): " + reset);
+                continue;
+            }
+            try {
+                int n = Integer.parseInt(s);
+                if (n < 1) {
+                    System.out.print(red + "n must be >= 1: " + reset);
+                    continue;
+                }
+                return n;
+            } catch (NumberFormatException e) {
+                System.out.print(red + "Please enter a positive integer (>=1): " + reset);
+            }
+        }
+    }
+
+    private static double calculateMedian() {
+        if (arrC.isEmpty()) return 0.0;
+        ArrayList<Double> copy = new ArrayList<>(arrC);
+        copy.sort(Double::compareTo);
+        int n = copy.size();
+        if (n % 2 == 1) {
+            return copy.get(n / 2);
+        } else {
+            return (copy.get(n / 2 - 1) + copy.get(n / 2)) / 2.0;
+        }
+    }
+
+    private static double calculateArithmeticMean() {
+        if (arrC.isEmpty()) return 0.0;
+        double sum = 0.0;
+        for (double v : arrC) sum += v;
+        return sum / arrC.size();
+    }
+
+    private static double calculateGeometricMean() {
+        if (arrC.isEmpty()) return 0.0;
+        for (double v : arrC) {
+            if (v <= 0.0) return Double.NaN;
+        }
+        double logSum = 0.0;
+        for (double v : arrC) logSum += Math.log(v);
+        return Math.exp(logSum / arrC.size());
+    }
+
+    private static double calculateHarmonicMean() {
+        if (arrC.isEmpty()) return 0.0;
+        for (double v : arrC) {
+            if (v == 0.0) return Double.NaN; // division by zero
+        }
+        double sumRecip = harmonicRec(arrC, 0);
+        return arrC.size() / sumRecip;
+    }
+
+    private static double harmonicRec(ArrayList<Double> a, int idx) {
+        if (idx == a.size()) return 0.0;
+        return (1.0 / a.get(idx)) + harmonicRec(a, idx + 1);
+    }
+
+    // ---------- Option C — Task 2: Distance between Two Arrays ----------
+    private static void distanceBetweenTwoArrays() {
+        System.out.println(yellow + "=== Distance between Two Arrays ===" + reset);
+        int d = getDimension();
+
+        System.out.println(cyan + "Enter the first vector of length " + d + " (integers 0..9, space/newline separated):" + reset);
+        int[] a = readVector(d, "A");
+
+        System.out.println(cyan + "Enter the second vector of length " + d + " (integers 0..9, space/newline separated):" + reset);
+        int[] b = readVector(d, "B");
+
+        double manhattan = calculateManhattanDistance(a, b);
+        double euclidean = calculateEuclideanDistance(a, b);
+        Double cosine = calculateCosineSimilarity(a, b);
+
+        System.out.println(green + "\nResults:" + reset);
+        System.out.printf(cyan + "Manhattan distance: " + reset + "%.6f%n", manhattan);
+        System.out.printf(cyan + "Euclidean distance: " + reset + "%.6f%n", euclidean);
+        if (cosine == null || cosine.isNaN()) {
+            System.out.println(cyan + "Cosine similarity:  " + reset + red + "undefined (one of the vectors is zero)" + reset);
+        } else {
+            System.out.printf(cyan + "Cosine similarity:  " + reset + "%.6f%n", cosine);
+        }
+
+        System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
+        SC.nextLine();
+    }
+
+    private static int getDimension() {
+        System.out.print(yellow + "Enter dimension (d >= 1): " + reset);
+        while (true) {
+            String s = SC.nextLine().trim();
+            if (!s.matches("\\d+")) {
+                System.out.print(red + "Please enter a positive integer (>=1): " + reset);
+                continue;
+            }
+            try {
+                int d = Integer.parseInt(s);
+                if (d < 1) {
+                    System.out.print(red + "d must be >= 1: " + reset);
+                    continue;
+                }
+                return d;
+            } catch (NumberFormatException e) {
+                System.out.print(red + "Please enter a positive integer (>=1): " + reset);
+            }
+        }
+    }
+
+    private static int[] readVector(int d, String name) {
+        int[] v = new int[d];
+        int filled = 0;
+
+        while (filled < d) {
+            String line = SC.nextLine().trim();
+            if (line.isEmpty()) continue;
+
+            String[] toks = line.split("\\s+");
+            int j = 0;
+
+            for (; j < toks.length; j++) {
+                if (filled >= d) break;
+                String t = toks[j];
+                if (!t.matches("\\d+")) {
+                    System.out.println(red + "Invalid integer: " + t + ". Please continue entering the remaining values." + reset);
+                    continue;
+                }
+                try {
+                    int val = Integer.parseInt(t);
+                    if (val < 0 || val > 9) {
+                        System.out.println(red + "Elements must be in [0..9]. Got: " + val + reset);
+                        continue;
+                    }
+                    v[filled++] = val;
+                } catch (NumberFormatException e) {
+                    System.out.println(red + "Invalid integer: " + t + reset);
+                }
+            }
+
+            // Fazla token uyarısı
+            if (filled >= d && j < toks.length) {
+                String[] extras = Arrays.copyOfRange(toks, j, toks.length);
+                System.out.println(
+                    red + "Warning: You entered " + extras.length +
+                    " extra value(s) beyond the expected " + d + " for vector " + name +
+                    ". They were ignored: " + String.join(" ", extras) + reset
+                );
+            }
+        }
+        return v;
+    }
+
+    private static double calculateManhattanDistance(int[] a, int[] b) {
+        long sum = 0L;
+        for (int i = 0; i < a.length; i++) {
+            sum += Math.abs(a[i] - b[i]);
+        }
+        return (double) sum;
+    }
+
+    private static double calculateEuclideanDistance(int[] a, int[] b) {
+        double sumsq = 0.0;
+        for (int i = 0; i < a.length; i++) {
+            double diff = a[i] - b[i];
+            sumsq += diff * diff;
+        }
+        return Math.sqrt(sumsq);
+    }
+
+    private static Double calculateCosineSimilarity(int[] a, int[] b) {
+        long dot = 0L;
+        long normA2 = 0L;
+        long normB2 = 0L;
+        for (int i = 0; i < a.length; i++) {
+            dot += (long) a[i] * b[i];
+            normA2 += (long) a[i] * a[i];
+            normB2 += (long) b[i] * b[i];
+        }
+        if (normA2 == 0L || normB2 == 0L) {
+            return null; // undefined
+        }
+        return dot / (Math.sqrt(normA2) * Math.sqrt(normB2));
+    }
+
+    // =============================
+    // Option D — University (stubs)
+    // =============================
+    private static void subMenuOption4() {
+        System.out.println(yellow + "Option D is not implemented in this build." + reset);
+        System.out.println(yellow + "Press ENTER to return to main menu..." + reset);
+        SC.nextLine();
     }
 }
