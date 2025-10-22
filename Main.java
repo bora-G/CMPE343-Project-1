@@ -1,5 +1,5 @@
-import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -34,9 +34,9 @@ public class Main {
         System.out.println(green + "-----------------------------------------------" + reset);
         System.out.println(green + "Group Members:" + reset);
         System.out.println(cyan + " - Bora Görgün" + reset);
-        System.out.println(cyan + " - [Member 2]" + reset);
-        System.out.println(cyan + " - [Member 3]" + reset);
-        System.out.println(cyan + " - [Member 4]" + reset);
+        System.out.println(cyan + " - Can Ersan" + reset);
+        System.out.println(cyan + " - Melek Sadiki" + reset);
+        System.out.println(cyan + " - Mikail Karacaer" + reset);
         System.out.println();
         System.out.println(yellow + "Press ENTER to continue..." + reset);
 
@@ -47,29 +47,29 @@ public class Main {
     private static void mainMenu() {
         while (true) {
             System.out.println(red+"********************************"+reset);
-            System.out.println(cyan+"[1] Primary School"+reset);
-            System.out.println(cyan+"[2] Secondary School"+reset);
-            System.out.println(cyan+"[3] High Schooll"+reset);
-            System.out.println(cyan+"[4] University"+reset);
-            System.out.println(cyan+"[5] Terminate"+reset);
+            System.out.println(cyan+"[A] Primary School"+reset);
+            System.out.println(cyan+"[B] Secondary School"+reset);
+            System.out.println(cyan+"[C] High School"+reset);
+            System.out.println(cyan+"[D] University"+reset);
+            System.out.println(cyan+"[E] Terminate"+reset);
             System.out.println(red+"********************************"+reset);
             System.out.println(green+"Please select an option to continue: "+reset);
-            int choice = readInt(SC, 1, 5);
+            int choice = readMenuOption(SC, 'A', 'E');
 
             switch (choice) {
-                case 1:
+                case 'A':
                     subMenuOption1();
                     break;
-                case 2:
+                case 'B':
                     subMenuOption2();
                     break;
-                case 3:
+                case 'C':
                     subMenuOption3();
                     break;
-                case 4:
+                case 'D':
                     subMenuOption4();
                     break;
-                case 5:
+                case 'E':
                     System.out.println(green + "\nTurning the program off...");
                     System.out.println(red + "Thank you for using our program!");
                     return;
@@ -78,9 +78,41 @@ public class Main {
         }
     }
 
+    private static char readMenuOption(Scanner scan, char min, char max) {
+        while (true) {
+            String s = scan.nextLine().trim().toUpperCase();
+
+            if (s.isEmpty()) {
+                System.out.print(red + "Input cannot be empty. Please enter a letter between " + min + " and " + max + ": " + reset);
+                continue;
+            }
+
+            if (s.length() > 1){
+                System.out.print(red + "Invalid input. Please enter a single letter: " + reset);
+                continue;
+
+            }
+
+            char choice = s.charAt (0);
+
+            if (choice < min || choice > max) {
+                System.out.print(red + "Please enter a valid option letter between [" + min + "] and [" + max + "]: " + reset);
+                continue;
+            }
+            return choice;
+        }
+    }
+
+    
+    /* 
     private static int readInt(Scanner scan, int min, int max) {
         while (true) {
             String s = scan.nextLine().trim();
+
+            if (s.isEmpty()) {
+                System.out.print(red + "Input cannot be empty. Please enter a number between " + min + " and " + max + ": " + reset);
+                continue;
+            }
             if (!s.matches("\\d+")) {
                 System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
                 continue;
@@ -102,6 +134,7 @@ public class Main {
             return val;
         }
     }
+        */
 
     /* Optional helpers for menu I/O (no implementation yet) */
     private static void clearScreen() {
@@ -118,21 +151,21 @@ public class Main {
         System.out.println("");
          while (true) {
             System.out.println(red+"********************************"+reset);
-            System.out.println(cyan+"[1] Calculate Age and Zodiac Sign"+reset);
-            System.out.println(cyan+"[2] Reverse the Words"+reset);
-            System.out.println(cyan+"[3] Terminate"+reset);
+            System.out.println(cyan+"[A] Calculate Age and Zodiac Sign"+reset);
+            System.out.println(cyan+"[B] Reverse the Words"+reset);
+            System.out.println(cyan+"[C] Return To Main Menu"+reset);
             System.out.println(red+"********************************"+reset);
             System.out.println(green+"Please select an option to continue: "+reset);
-            int choice = readInt(SC, 1, 3);
+            int choice = readMenuOption(SC, 'A', 'C');
 
             switch (choice) {
-                case 1:
+                case 'A':
                     ageAndZodiacSignDetection();
                     break;
-                case 2:
+                case 'B':
                     reverseTheWords();
                     break;
-                case 3:
+                case 'C':
                     System.out.println(green + "\nReturning the main menu."+reset);
                     return;
             }
@@ -245,6 +278,7 @@ public class Main {
         return false;
     }
 
+    /* 
     private static int getDay(Scanner scan) {
         while (true) {
             int currentMonth = getCurrentMonth();
@@ -299,6 +333,8 @@ public class Main {
         }
 
     }
+    */
+    
 
     // Day validator using provided birth month/year (prevents dates like 31/04)
     private static int getDay(Scanner scan, int month, int year) {
@@ -438,12 +474,29 @@ public class Main {
 
     // Main function of Option A Task 2. Print reversed word.
     private static void reverseTheWords() {
-        // TODO: Orchestrate input, recursion, and output
+        String input = getTextInput(SC);
+        //String output = createReverseOutput(input);
+        
+        System.out.println(yellow + "\nOriginal Text:\n" + reset + input);
+        //System.out.println(cyan + "Reversed Words Text:\n" + reset + output);
+
+        System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
+        SC.nextLine();
     }
 
     // Get text input from user with using java.util.Scanner and return it.
-    private static String getTextInput() {
-        return "";
+    private static String getTextInput(Scanner scan) {
+        String s;
+        System.out.print(yellow + "Enter your text to be reversed: " + reset);
+        while (true){
+            s = scan.nextLine();
+            if (s.isEmpty()) {
+                System.out.print(red + "Input cannot be empty. Please enter your text: " + reset);
+                continue;
+            }
+            return s;
+        }
+
     }
 
     // After getting input from user, create reverse form and return it.
