@@ -1,247 +1,731 @@
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class Main {
 
-    /* =============================
-     *  Welcome & Main Menu TestBORAG
-     * ============================= */
+    /*
+     * =============================
+     * Welcome & Main Menu
+     * =============================
+     */
+    private static final java.util.Scanner SC = new java.util.Scanner(System.in);
+    private static final String cyan = "\u001B[36m";
+    private static final String yellow = "\u001B[33m";
+    private static final String green = "\u001B[32m";
+    private static final String reset = "\u001B[0m";
+    private static final String red = "\u001B[31m";
 
     private static void welcomeMessage() {
-           clearScreen();
+        clearScreen();
 
-    String cyan = "\u001B[36m";
-    String yellow = "\u001B[33m";
-    String green = "\u001B[32m";
-    String reset = "\u001B[0m";
+        System.out.println(yellow +
+                " █████   ███   █████          ████                                        \n" +
+                "░░███   ░███  ░░███          ░░███                                        \n" +
+                " ░███   ░███   ░███   ██████  ░███   ██████   ██████  █████████████    ██████  \n" +
+                " ░███   ░███   ░███  ███░░███ ░███  ███░░███ ███░░███░░███░░███░░███  ███░░███ \n" +
+                " ░░███  █████  ███  ░███████  ░███ ░███ ░░░ ░███ ░███ ░███ ░███ ░███ ░███████  \n" +
+                "  ░░░█████░█████░   ░███░░░   ░███ ░███  ███░███ ░███ ░███ ░███ ░███ ░███░░░   \n" +
+                "    ░░███ ░░███     ░░██████  █████░░██████ ░░██████  █████░███ █████░░██████  \n" +
+                "     ░░░   ░░░       ░░░░░░  ░░░░░  ░░░░░░   ░░░░░░  ░░░░░ ░░░ ░░░░░  ░░░░░░   \n" +
+                reset);
 
-    System.out.println(yellow +
-" █████   ███   █████          ████                                        \n" +
-"░░███   ░███  ░░███          ░░███                                        \n" +
-" ░███   ░███   ░███   ██████  ░███   ██████   ██████  █████████████    ██████  \n" +
-" ░███   ░███   ░███  ███░░███ ░███  ███░░███ ███░░███░░███░░███░░███  ███░░███ \n" +
-" ░░███  █████  ███  ░███████  ░███ ░███ ░░░ ░███ ░███ ░███ ░███ ░███ ░███████  \n" +
-"  ░░░█████░█████░   ░███░░░   ░███ ░███  ███░███ ░███ ░███ ░███ ░███ ░███░░░   \n" +
-"    ░░███ ░░███     ░░██████  █████░░██████ ░░██████  █████░███ █████░░██████  \n" +
-"     ░░░   ░░░       ░░░░░░  ░░░░░  ░░░░░░   ░░░░░░  ░░░░░ ░░░ ░░░░░  ░░░░░░   \n" +
-reset);
+        System.out.println(green + "Welcome to CMPE343 Project 1" + reset);
+        System.out.println(green + "-----------------------------------------------" + reset);
+        System.out.println(green + "Group Members:" + reset);
+        System.out.println(cyan + " - Bora Görgün" + reset);
+        System.out.println(cyan + " - [Member 2]" + reset);
+        System.out.println(cyan + " - [Member 3]" + reset);
+        System.out.println(cyan + " - [Member 4]" + reset);
+        System.out.println();
+        System.out.println(yellow + "Press ENTER to continue..." + reset);
 
-    System.out.println(green + "Welcome to CMPE343 Project 1" + reset);
-    System.out.println(green + "-----------------------------------------------" + reset);
-    System.out.println(green + "Group Members:" + reset);
-    System.out.println(cyan + " - Bora Görgün"+ reset);
-    System.out.println(cyan + " - [Member 2]"+ reset);
-    System.out.println(cyan + " - [Member 3]"+ reset);
-    System.out.println(cyan + " - [Member 4]"+ reset);
-    System.out.println();
-    System.out.println(yellow + "Press ENTER to continue..." + reset);
+        SC.nextLine();
+        clearScreen();
+    }
 
-    new Scanner(System.in).nextLine();
-    clearScreen();
+    private static void mainMenu() {
+        while (true) {
+            System.out.println(red + "********************************" + reset);
+            System.out.println(cyan + "[1] Primary School" + reset);
+            System.out.println(cyan + "[2] Secondary School" + reset);
+            System.out.println(cyan + "[3] High Schooll" + reset);
+            System.out.println(cyan + "[4] University" + reset);
+            System.out.println(cyan + "[5] Terminate" + reset);
+            System.out.println(red + "********************************" + reset);
+            System.out.print(green + "Please select an option to continue: " + reset);
+            int choice = readInt(SC, 1, 5);
+
+            switch (choice) {
+                case 1 -> subMenuOption1();
+                case 2 -> subMenuOption2();
+                case 3 -> subMenuOption3();
+                case 4 -> subMenuOption4();
+                case 5 -> {
+                    System.out.println(green + "\nTurning the program off..." + reset);
+                    System.out.println(red + "Thank you for using our program!" + reset);
+                    return;
+                }
+            }
+            clearScreen();
+        }
+    }
+
+    private static int readInt(Scanner scan, int min, int max) {
+        while (true) {
+            String s = scan.nextLine().trim();
+            if (!s.matches("\\d+")) {
+                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+                continue;
+            }
+
+            int val;
+            try {
+                val = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+                continue;
+            }
+
+            if (val < min || val > max) {
+                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+                continue;
+            }
+
+            return val;
+        }
+    }
+
+    /* Optional helpers for menu I/O */
+    private static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     /*
-        [A] Primary School
-        [B] Secondary School
-        [C] High School
-        [D] University
-        [E] Terminate
-    */
-    private static void mainMenu() {
-        // TODO: Show main menu, read user choice, route to sub-menus
+     * =============================
+     * Option A — Primary School
+     * =============================
+     */
+    private static void subMenuOption1() {
+        System.out.println("");
+        while (true) {
+            System.out.println(red + "********************************" + reset);
+            System.out.println(cyan + "[1] Calculate Age and Zodiac Sign" + reset);
+            System.out.println(cyan + "[2] Reverse the Words" + reset);
+            System.out.println(cyan + "[3] Terminate" + reset);
+            System.out.println(red + "********************************" + reset);
+            System.out.print(green + "Please select an option to continue: " + reset);
+            int choice = readInt(SC, 1, 3);
+
+            switch (choice) {
+                case 1 -> ageAndZodiacSignDetection();
+                case 2 -> reverseTheWords();
+                case 3 -> {
+                    System.out.println(green + "\nReturning the main menu." + reset);
+                    return;
+                }
+            }
+            clearScreen();
+        }
     }
 
-    /* Optional helpers for menu I/O (no implementation yet) */
-    private static void clearScreen() {
-           System.out.print("\033[H\033[2J");
-    System.out.flush();
-    }
-
-    private static char readMenuChoice(Scanner sc) {
-        // TODO: Read a single non-empty character and return uppercase
-        return 'E';
-    }
-
-    private static int readInt(Scanner sc) {
-        // TODO: Safe integer input with retry
-        return 0;
-    }
-
-    private static String readLine(Scanner sc) {
-        // TODO: Safe full-line input
-        return "";
-    }
-
-    /* =============================
-     *  Option A — Primary School
-     * ============================= */
-
-    // Age and Zodiac Sign Detection, Reverse the Words, and Return to Main Menu.
-    private static void subMenuOptionA() {
-        // TODO: Submenu loop for Option A
-    }
-
-    /* Option A — Task 1: Age and Zodiac Sign Detection */
-
-    // Main function of Option A Task 1. Print age and zodiac.
     private static void ageAndZodiacSignDetection() {
-        // TODO: Orchestrate input, calculations, and formatted output
+        System.out.print(yellow + "Please enter your year of birth: " + reset);
+        int birthYear = getYear(SC);
+
+        System.out.print(yellow + "Please enter your month of birth (1-12): " + reset);
+        int birthMonth = getMonth(SC);
+
+        System.out.print(yellow + "Please enter your day of birth: " + reset);
+        int birthDay = getDay(SC, birthMonth, birthYear);
+
+        int currentYear = getCurrentYear();
+        int currentMonth = getCurrentMonth();
+        int currentDay = getCurrentDay();
+
+        int years = currentYear - birthYear;
+        int months = currentMonth - birthMonth;
+        int days = currentDay - birthDay;
+
+        int tempMonth = currentMonth;
+        int tempYear = currentYear;
+
+        while (days < 0) {
+            int prevMonth = tempMonth - 1;
+            int prevYear = tempYear;
+            if (prevMonth == 0) {
+                prevMonth = 12;
+                prevYear -= 1;
+            }
+            int dim = getDaysInMonth(prevMonth, prevYear);
+
+            days += dim;
+            months -= 1;
+
+            tempMonth = prevMonth;
+            tempYear = prevYear;
+        }
+
+        if (months < 0) {
+            years -= 1;
+            months += 12;
+        }
+
+        System.out.println(cyan + "Your age: " + years + " years, " + months + " months, " + days + " days" + reset);
+        System.out.println(red + "Your zodiac sign is " + getZodiacString(birthDay, birthMonth) + "." + reset);
+        if (birthYear <= 1500) {
+            System.out.println(red + " Wow... You must be a time traveler! " + reset);
+            System.out.println(yellow + "Are you sure you were born in " + birthYear + "?" + reset);
+        }
+        System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
+        SC.nextLine();
     }
 
-    // Get date of birth from user using java.util.Scanner.
-    private static int getDay() { return 0; }
-    private static int getMonth() { return 0; }
-    private static int getYear() { return 0; }
+    private static String getZodiacString(int day, int month) {
+        if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return "Aries";
+        if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return "Taurus";
+        if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return "Gemini";
+        if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return "Cancer";
+        if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return "Leo";
+        if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return "Virgo";
+        if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return "Libra";
+        if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return "Scorpio";
+        if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return "Sagittarius";
+        if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return "Capricorn";
+        if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return "Aquarius";
+        if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return "Pisces";
+        return "Unknown";
+    }
 
-    // Get current date using java.util.Calendar package.
-    private static int getCurrentDay() { return 0; }
-    private static int getCurrentMonth() { return 0; }
-    private static int getCurrentYear() { return 0; }
+    private static int getDaysInMonth(int month, int year) {
+        if (month == 2) return IsLeapYear(year) ? 29 : 28;
+        else if (month == 4 || month == 6 || month == 9 || month == 11) return 30;
+        else return 31;
+    }
 
-    // Calculate age with parameters that are day, month and year.
-    private static int calculateAge(String day, String month, String year) { return 0; }
+    private static boolean IsLeapYear(int year) {
+        return (year % 400 == 0) || (year % 4 == 0 && year % 100 != 0);
+    }
 
-    // Calculate zodiac with parameters that are day, month and year.
-    private static String calculateZodiac(String day, String month, String year) { return ""; }
+    // Day validator using provided birth month/year (prevents dates like 31/04)
+    private static int getDay(Scanner scan, int month, int year) {
+        while (true) {
+            String s = scan.nextLine().trim();
+            if (s.length() > 1 && s.charAt(0) == '0') {
+                System.out.println(red + "Leading zeros are not allowed for day." + reset);
+                System.out.print(red + "Please enter your day of birth: " + reset);
+                continue;
+            }
+            if (!s.matches("\\d+")) {
+                System.out.println(red + "Your day of birth must contain digits only." + reset);
+                System.out.print(red + "Please enter your day of birth: " + reset);
+                continue;
+            }
 
-    /* Option A — Task 2: Reverse the Words (recursive) */
+            int val;
+            try {
+                val = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.out.println(red + "Invalid day value (number too large)." + reset);
+                System.out.print(red + "Please enter your day of birth: " + reset);
+                continue;
+            }
 
-    // Main function of Option A Task 2. Print reversed word.
+            int max;
+            if (month == 2) max = IsLeapYear(year) ? 29 : 28;
+            else if (month == 4 || month == 6 || month == 9 || month == 11) max = 30;
+            else max = 31;
+
+            if (val <= 0 || val > max) {
+                System.out.println(red + "Your day of birth must be between 1 - " + max + "." + reset);
+                System.out.print(red + "Please enter your day of birth: " + reset);
+                continue;
+            }
+
+            return val;
+        }
+    }
+
+    private static int getMonth(Scanner scan) {
+        while (true) {
+            String s = scan.nextLine().trim();
+            if (s.length() > 1 && s.charAt(0) == '0') {
+                System.out.println(red + "Leading zeros are not allowed for month." + reset);
+                System.out.print(red + "Please enter your month of birth: " + reset);
+                continue;
+            }
+            if (!s.matches("\\d+")) {
+                System.out.println(red + "Your month of birth must contain digits only." + reset);
+                System.out.print(red + "Please enter your month of birth: " + reset);
+                continue;
+            }
+
+            int val;
+            try {
+                val = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.out.println(red + "Invalid month value (number too large)." + reset);
+                System.out.print(red + "Please enter your month of birth: " + reset);
+                continue;
+            }
+
+            if (val <= 0 || val > 12) {
+                System.out.println(red + "Your month of birth must be between 1 - 12." + reset);
+                System.out.print(red + "Please enter your month of birth: " + reset);
+                continue;
+            }
+
+            return val;
+        }
+    }
+
+    private static int getYear(Scanner scan) {
+        while (true) {
+            int currentYear = getCurrentYear();
+            String s = scan.nextLine().trim();
+            if (s.length() > 1 && s.charAt(0) == '0') {
+                System.out.println(red + "Leading zeros are not allowed for year." + reset);
+                System.out.print(red + "Please enter your year of birth: " + reset);
+                continue;
+            }
+            if (!s.matches("\\d+")) {
+                System.out.println(red + "Your year of birth must contain digits only." + reset);
+                System.out.print(red + "Please enter your year of birth: " + reset);
+                continue;
+            }
+
+            int val;
+            try {
+                val = Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.out.println(red + "Invalid year value (number too large)." + reset);
+                System.out.print(red + "Please enter your year of birth: " + reset);
+                continue;
+            }
+
+            if (val < 0) {
+                System.out.println(red + "Your year of birth cannot be negative." + reset);
+                System.out.print(red + "Please enter your year of birth: " + reset);
+                continue;
+            }
+
+            if (val > currentYear) {
+                System.out.println(red + "Your year of birth cannot be in the future (<= " + currentYear + ")." + reset);
+                System.out.print(red + "Please enter your year of birth: " + reset);
+                continue;
+            }
+
+            return val;
+        }
+    }
+
+    private static int getCurrentDay() {
+        return LocalDate.now().getDayOfMonth();
+    }
+
+    private static int getCurrentMonth() {
+        return LocalDate.now().getMonthValue();
+    }
+
+    private static int getCurrentYear() {
+        return LocalDate.now().getYear();
+    }
+
+    /* Option A — Task 2: Reverse the Words (recursive per word) */
+
     private static void reverseTheWords() {
-        // TODO: Orchestrate input, recursion, and output
+        System.out.print(yellow + "Please enter a sentence: " + reset);
+        String input = getTextInput();
+        if (!isReversed(input)) {
+            System.out.println(red + "Input must contain at least 2 characters." + reset);
+        } else {
+            String out = createReverseOutput(input);
+            System.out.println(cyan + "Reversed: " + out + reset);
+        }
+        System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
+        SC.nextLine();
     }
 
-    // Get text input from user with using java.util.Scanner and return it.
-    private static String getTextInput() { return ""; }
+    private static String getTextInput() {
+        return SC.nextLine();
+    }
 
-    // After getting input from user, create reverse form and return it.
-    private static String createReverseOutput() { return ""; }
+    private static String createReverseOutput(String s) {
+        // Kelime sırasını koru, her kelimeyi recursive ters çevir
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        while (i < s.length()) {
+            // boşlukları koru
+            int j = i;
+            while (j < s.length() && Character.isWhitespace(s.charAt(j))) j++;
+            sb.append(s, i, j);
+            if (j >= s.length()) break;
 
-    // If input length >= 2, it can be reversed.
-    private static boolean isReversed() { return true; }
+            // kelimeyi al
+            int k = j;
+            while (k < s.length() && !Character.isWhitespace(s.charAt(k))) k++;
+            String word = s.substring(j, k);
+            sb.append(reverseWordRec(word));
+            i = k;
+        }
+        return sb.toString();
+    }
 
-    // Recursive helper for reversing a single word (no implementation)
-    private static String reverseWordRec(String s) { return ""; }
+    private static boolean isReversed(String s) {
+        return s != null && s.trim().length() >= 2;
+    }
 
-    /* =============================
-     *  Option B — Secondary School
-     * ============================= */
+    // Özyinelemeli olarak bir kelimeyi ters çevir
+    private static String reverseWordRec(String s) {
+        if (s == null || s.length() <= 1) return s;
+        return s.charAt(s.length() - 1) + reverseWordRec(s.substring(0, s.length() - 1));
+    }
 
-    // Prime Numbers, Step by step Evaluation of Expression, and Return to Main Menu.
-    private static void subMenuOptionB() {
-        // TODO: Submenu loop for Option B
+    /*
+     * =============================
+     * Option B — Secondary School
+     * =============================
+     */
+
+    private static void subMenuOption2() {
+        while (true) {
+            System.out.println(red + "********************************" + reset);
+            System.out.println(cyan + "[1] Prime Numbers (comparison)" + reset);
+            System.out.println(cyan + "[2] Step-by-step Evaluation of Expression" + reset);
+            System.out.println(cyan + "[3] Terminate" + reset);
+            System.out.println(red + "********************************" + reset);
+            System.out.print(green + "Please select an option to continue: " + reset);
+
+            int choice = readInt(SC, 1, 3);
+            switch (choice) {
+                case 1 -> primeNumbers();
+                case 2 -> {
+                    System.out.println(yellow + "\nEnter an expression with digits and + - x × : ( )" + reset);
+                    Expr.run(SC);
+                    System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
+                    SC.nextLine();
+                }
+                case 3 -> {
+                    System.out.println(green + "\nReturning the main menu." + reset);
+                    return;
+                }
+            }
+            clearScreen();
+        }
     }
 
     /* Option B — Task 1: Prime Numbers */
 
-    // Main function of Option B Task 1. Print first and last 3 prime numbers and execution times.
+    static class R {
+        List<Integer> list;
+        long nanos;
+        R(List<Integer> l, long n) { list = l; nanos = n; }
+    }
+
     private static void primeNumbers() {
-        // TODO: Orchestrate n input, run sieves, measure times, print head/tail
+        int n = getPrimeNumberInput();
+
+        R er = measure(() -> Primes.sieveEratosthenes(n));
+        R su = measure(() -> Primes.sieveSundaram(n));
+        R at = measure(() -> Primes.sieveAtkin(n));
+
+        System.out.println();
+        printPrimeSummary("Eratosthenes", er);
+        printPrimeSummary("Sundaram   ", su);
+        printPrimeSummary("Atkin      ", at);
+
+        if (!er.list.equals(su.list) || !er.list.equals(at.list)) {
+            System.out.println("\n" + red + "WARNING: Methods produced different results!" + reset);
+            System.out.println("Differences relative to Eratosthenes:");
+            printDiff("Sundaram", er.list, su.list);
+            printDiff("Atkin   ", er.list, at.list);
+        }
+
+        System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
+        SC.nextLine();
     }
 
-    // Get prime limit n from user using java.util.Scanner (n >= 12).
-    private static int getPrimeNumberInput() { return 0; }
-
-    // Create an ArrayList and push all prime numbers then return it. Print execution time externally.
-    private static ArrayList<Integer> sieveOfEratosthenes() { return new ArrayList<>(); }
-    private static ArrayList<Integer> sieveOfSundaram() { return new ArrayList<>(); }
-    private static ArrayList<Integer> sieveOfAtkin() { return new ArrayList<>(); }
-
-    /* Option B — Task 2: Step-by-step Evaluation of Expression (recursive stages) */
-
-    // Main function of Option B Task 2.
-    private static void evaluationOfExpression() {
-        // TODO: Read expression, validate, recursively reduce and print each stage
+    private static int getPrimeNumberInput() {
+        System.out.print(green + "Enter n (n >= 12): " + reset);
+        int n;
+        while (true) {
+            String s = SC.nextLine().trim();
+            try {
+                n = Integer.parseInt(s);
+                if (n < 12) throw new NumberFormatException();
+                break;
+            } catch (NumberFormatException e) {
+                System.out.print(red + "Invalid integer (>=12). Try again: " + reset);
+            }
+        }
+        return n;
     }
 
-    // Get expression input from user with using java.util.Scanner.
-    private static String getExpressionInput() { return ""; }
-
-    // Check valid expression or not.
-    private static boolean isValidExpression() { return false; }
-
-    private static int calculateExpression(String expression) { return 0; }
-
-    /* =============================
-     *  Option C — High School
-     * ============================= */
-
-    // Statistical Information about an Array, Distance between Two Arrays, and Return to Main Menu.
-    private static void subMenuOptionC() {
-        // TODO: Submenu loop for Option C
+    private static R measure(Supplier<List<Integer>> job) {
+        long t0 = System.nanoTime();
+        List<Integer> out = job.get();
+        return new R(out, System.nanoTime() - t0);
     }
 
-    /* Option C — Task 1: Statistical Information about an Array */
-
-    // Main function of Option C Task 1. Print all calculations.
-    private static void statisticalInformation() {
-        // TODO: Read size/elements, compute and print median/means
+    private static void printPrimeSummary(String name, R r) {
+        System.out.printf("Method: %s | Time: %.3f ms | ", name, r.nanos / 1_000_000.0);
+        List<Integer> p = r.list;
+        if (p.isEmpty()) { System.out.println("No primes."); return; }
+        String first3 = p.stream().limit(3).map(String::valueOf).collect(Collectors.joining(","));
+        String last2 = p.size() >= 2
+                ? p.get(p.size() - 2) + "," + p.get(p.size() - 1)
+                : String.valueOf(p.get(p.size() - 1));
+        System.out.printf("First3: %s | Last2: %s%n", first3, last2);
     }
 
-    private static int arraySize() { return 0; }
-    private static ArrayList<Integer> getElement() { return new ArrayList<>(); }
-
-    private static double calculateMedian() { return 0.0; }
-    private static double calculateArithmeticMedian() { return 0.0; }
-    private static double calculateGeometricMedian() { return 0.0; }
-    private static double calculateHarmonicMedian() { return 0.0; } // !!! Should be computed recursively
-
-    /* Option C — Task 2: Distance between Two Arrays */
-
-    // Main function of Option C Task 2. Print all calculations.
-    private static void distanceBetweenTwoArrays() {
-        // TODO: Read dimension & arrays (0-9), compute Manhattan/Euclidean/Cosine
+    private static void printDiff(String name, List<Integer> ref, List<Integer> other) {
+        Set<Integer> missing = new LinkedHashSet<>(ref);   missing.removeAll(other);
+        Set<Integer> extra   = new LinkedHashSet<>(other); extra.removeAll(ref);
+        if (missing.isEmpty() && extra.isEmpty())
+            System.out.println("  " + name + ": (no difference)");
+        else {
+            System.out.println("  " + name + " missing vs ref: " + missing);
+            System.out.println("  " + name + " extra   vs ref: " + extra);
+        }
     }
 
-    // Get dimension from user with using java.util.Scanner.
-    private static int getDimension() { return 0; }
+    static class Primes {
+        public static List<Integer> sieveEratosthenes(int n) {
+            if (n < 2) return Collections.emptyList();
+            boolean[] isPrime = new boolean[n + 1];
+            Arrays.fill(isPrime, true);
+            isPrime[0] = false; if (n >= 1) isPrime[1] = false;
+            for (int p = 2; (long) p * p <= n; p++)
+                if (isPrime[p])
+                    for (long m = (long) p * p; m <= n; m += p) isPrime[(int) m] = false;
+            List<Integer> out = new ArrayList<>();
+            for (int i = 2; i <= n; i++) if (isPrime[i]) out.add(i);
+            return out;
+        }
 
-    // Check entered dimension is valid or not.
-    private static boolean isValidDimension() { return false; }
+        public static List<Integer> sieveSundaram(int n) {
+            if (n < 2) return Collections.emptyList();
+            int k = (n - 1) / 2;
+            boolean[] marked = new boolean[k + 1];
+            for (int i = 1; i <= k; i++)
+                for (int j = i; i + j + 2 * i * j <= k; j++)
+                    marked[i + j + 2 * i * j] = true;
+            List<Integer> out = new ArrayList<>();
+            out.add(2);
+            for (int i = 1; i <= k; i++) if (!marked[i]) out.add(2 * i + 1);
+            return out;
+        }
 
-    private static int calculateManhattanDistance() { return 0; }
-    private static int calculateEuclideanDistance() { return 0; }
-    private static int calculateCosineSimilarity() { return 0; }
-
-    /* =============================
-     *  Option D — University (Connect Four)
-     * ============================= */
-
-    // (Stubs only; implement later)
-    private static void subMenuOptionD() {
-        // TODO: Board size (5x4, 6x5, 7x6) and mode (1P vs CPU / 2P)
+        public static List<Integer> sieveAtkin(int limit) {
+            if (limit < 2) return Collections.emptyList();
+            boolean[] sieve = new boolean[limit + 1];
+            int sqrt = (int) Math.sqrt(limit);
+            for (int x = 1; x <= sqrt; x++) {
+                int x2 = x * x;
+                for (int y = 1; y <= sqrt; y++) {
+                    int y2 = y * y, n;
+                    n = 4 * x2 + y2; if (n <= limit && (n % 12 == 1 || n % 12 == 5)) sieve[n] ^= true;
+                    n = 3 * x2 + y2; if (n <= limit &&  n % 12 == 7)                 sieve[n] ^= true;
+                    n = 3 * x2 - y2; if (x > y && n <= limit && n % 12 == 11)        sieve[n] ^= true;
+                }
+            }
+            for (int r = 5; r <= sqrt; r++)
+                if (sieve[r])
+                    for (int m = r * r; m <= limit; m += r * r) sieve[m] = false;
+            List<Integer> primes = new ArrayList<>();
+            if (limit >= 2) primes.add(2);
+            if (limit >= 3) primes.add(3);
+            for (int a = 5; a <= limit; a++) if (sieve[a]) primes.add(a);
+            return primes;
+        }
     }
 
-    private static void startConnectFour() {
-        // TODO: Main game loop, render board each move
+    /* Option B — Task 2: Step-by-step Evaluation of Expression */
+
+    static class Expr {
+
+        static void run(Scanner sc) {
+            while (true) {
+                String expr = sc.nextLine();
+
+                if (!isValid(expr)) {
+                    System.out.println("Invalid input. Please re-enter a valid expression.");
+                    System.out.print("Enter an expression with digits and + - x × : ( ): ");
+                    continue;
+                }
+
+                try {
+                    evaluate(expr);
+                    System.out.println("Done.");
+                    break;
+                } catch (ArithmeticException e) {
+                    System.out.println("Error: Division by zero! Please re-enter a valid expression.");
+                    System.out.print("Enter an expression with digits and + - x × : ( ): ");
+                }
+            }
+        }
+
+        private static boolean isValid(String s) {
+            if (s == null || s.trim().isEmpty()) return false;
+            if (!s.matches("[0-9\\s\\+\\-x×:()]+")) return false;
+
+            String t = normalize(s);
+            if (t.isEmpty()) return false;
+            if (isOp(t.charAt(0)) || isOp(t.charAt(t.length() - 1))) return false;
+            if (t.contains(")(") || t.matches(".*\\d\\(.*") || t.matches(".*\\)\\d.*")) return false;
+
+            int bal = 0;
+            for (char c : t.toCharArray()) {
+                if (c == '(') bal++;
+                else if (c == ')') bal--;
+                if (bal < 0) return false;
+            }
+            if (bal != 0) return false;
+
+            String[] parts = s.trim().split("[^0-9]+");
+            int count = 0;
+            for (String p : parts) if (!p.isEmpty()) count++;
+            if (!t.matches(".*[+\\-*/].*") && count > 1) return false;
+
+            for (int i = 1; i < t.length(); i++) {
+                char c = t.charAt(i), p = t.charAt(i - 1);
+                if (isOp(c)) {
+                    if (p == '(' && c != '-') return false;
+                    if (isOp(p) && c != '-') return false;
+                }
+            }
+            return true;
+        }
+
+        private static String normalize(String s) {
+            return s.replace('×','*')
+                    .replace('x','*')
+                    .replace(':','/')
+                    .replace('−','-')
+                    .replaceAll("\\s+", "");
+        }
+
+        private static String denorm(String s) {
+            return s.replace('*','x').replace('/',':');
+        }
+
+        private static boolean isOp(char c) {
+            return c=='+'||c=='-'||c=='*'||c=='/';
+        }
+
+        private static void evaluate(String expr) {
+            String e = normalize(expr);
+            String result = reduce(e);
+            System.out.println("= " + denorm(result));
+        }
+
+        private static String reduce(String s) {
+            s = stripOuter(s);
+            if (s.matches("[+-]?\\d+")) return s;
+
+            int open = -1, close = -1;
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) == '(') open = i;
+                else if (s.charAt(i) == ')' && open != -1) { close = i; break; }
+            }
+            if (open != -1 && close != -1) {
+                String inside = reduce(s.substring(open + 1, close));
+                String next = s.substring(0, open) + inside + s.substring(close + 1);
+                System.out.println("= " + denorm(next));
+                return reduce(next);
+            }
+
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                if ((c == '*' || c == '/') && i > 0 && Character.isDigit(s.charAt(i - 1))) {
+                    String next = applyOp(s, i);
+                    System.out.println("= " + denorm(next));
+                    return reduce(next);
+                }
+            }
+
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                if ((c == '+' || c == '-') && i > 0 && Character.isDigit(s.charAt(i - 1))) {
+                    String next = applyOp(s, i);
+                    System.out.println("= " + denorm(next));
+                    return reduce(next);
+                }
+            }
+            return s;
+        }
+
+        private static String applyOp(String s, int idx) {
+            int L = idx - 1;
+            while (L >= 0 && Character.isDigit(s.charAt(L))) L--;
+            String left = s.substring(L + 1, idx);
+
+            int R = idx + 1;
+            while (R < s.length() && (Character.isDigit(s.charAt(R)) || s.charAt(R) == '-')) R++;
+            String right = s.substring(idx + 1, R);
+
+            long a = Long.parseLong(left);
+            long b = Long.parseLong(right);
+            long res;
+
+            switch (s.charAt(idx)) {
+                case '*' -> res = a * b;
+                case '/' -> {
+                    if (b == 0) throw new ArithmeticException("Division by zero");
+                    res = a / b;
+                }
+                case '+' -> res = a + b;
+                default  -> res = a - b;
+            }
+            return s.substring(0, L + 1) + res + s.substring(R);
+        }
+
+        private static String stripOuter(String s) {
+            while (s.startsWith("(") && s.endsWith(")")) {
+                int bal = 0; boolean ok = true;
+                for (int i = 0; i < s.length(); i++) {
+                    if (s.charAt(i) == '(') bal++;
+                    else if (s.charAt(i) == ')') bal--;
+                    if (bal == 0 && i < s.length() - 1) { ok = false; break; }
+                }
+                if (ok) s = s.substring(1, s.length() - 1);
+                else break;
+            }
+            return s;
+        }
     }
 
-    private static void renderBoard() {
-        // TODO: Print the board to console
+    /*
+     * =============================
+     * Option C — High School (stubs)
+     * =============================
+     */
+    private static void subMenuOption3() {
+        System.out.println(yellow + "Option C is under construction." + reset);
+        System.out.println(yellow + "Press ENTER to return to main menu..." + reset);
+        SC.nextLine();
     }
 
-    private static void makeMovePlayer() {
-        // TODO: Player move with column validation
+    /*
+     * =============================
+     * Option D — University (stubs)
+     * =============================
+     */
+    private static void subMenuOption4() {
+        System.out.println(yellow + "Option D (Connect Four) is under construction." + reset);
+        System.out.println(yellow + "Press ENTER to return to main menu..." + reset);
+        SC.nextLine();
     }
 
-    private static void makeMoveCPU() {
-        // TODO: Random/AI move (Minimax/Alpha-Beta optional)
-    }
-
-    private static boolean checkWin() { return false; }
-    private static boolean checkDraw() { return false; }
-
-    /* =============================
-     *  Program Entry Point
-     * ============================= */
-
+    /*
+     * =============================
+     * Program Entry Point
+     * =============================
+     */
     public static void main(String[] args) {
-        // TODO: Wire everything together
-        // Example flow (keep empty if you prefer):
-        // welcomeMessage();
-        // mainMenu();
-
-         welcomeMessage();
+        welcomeMessage();
+        mainMenu();
     }
 }
