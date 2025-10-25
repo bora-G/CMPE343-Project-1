@@ -11,11 +11,11 @@ public class Main {
      * =============================
      */
     private static final java.util.Scanner SC = new java.util.Scanner(System.in);
-    private static final String cyan = "\u001B[36m";
-    private static final String yellow = "\u001B[33m";
-    private static final String green = "\u001B[32m";
-    private static final String reset = "\u001B[0m";
-    private static final String red = "\u001B[31m";
+    private static String cyan = "\u001B[36m";
+    private static String yellow = "\u001B[33m";
+    private static String green = "\u001B[32m";
+    private static String reset = "\u001B[0m";
+    private static String red = "\u001B[31m";
 
     private static void welcomeMessage() {
         clearScreen();
@@ -35,9 +35,9 @@ public class Main {
         System.out.println(green + "-----------------------------------------------" + reset);
         System.out.println(green + "Group Members:" + reset);
         System.out.println(cyan + " - Bora Görgün" + reset);
-        System.out.println(cyan + " - [Member 2]" + reset);
-        System.out.println(cyan + " - [Member 3]" + reset);
-        System.out.println(cyan + " - [Member 4]" + reset);
+        System.out.println(cyan + " - Can Ersan" + reset);
+        System.out.println(cyan + " - Melek Sadiki" + reset);
+        System.out.println(cyan + " - Mikail Karacaer" + reset);
         System.out.println();
         System.out.println(yellow + "Press ENTER to continue..." + reset);
 
@@ -47,22 +47,22 @@ public class Main {
 
     private static void mainMenu() {
         while (true) {
-            System.out.println(red + "********************************" + reset);
-            System.out.println(cyan + "[1] Primary School" + reset);
-            System.out.println(cyan + "[2] Secondary School" + reset);
-            System.out.println(cyan + "[3] High Schooll" + reset);
-            System.out.println(cyan + "[4] University" + reset);
-            System.out.println(cyan + "[5] Terminate" + reset);
-            System.out.println(red + "********************************" + reset);
-            System.out.print(green + "Please select an option to continue: " + reset);
-            int choice = readInt(SC, 1, 5);
+            System.out.println(red+"********************************"+reset);
+            System.out.println(cyan+"[A] Primary School"+reset);
+            System.out.println(cyan+"[B] Secondary School"+reset);
+            System.out.println(cyan+"[C] High School"+reset);
+            System.out.println(cyan+"[D] University"+reset);
+            System.out.println(cyan+"[E] Terminate"+reset);
+            System.out.println(red+"********************************"+reset);
+            System.out.print(green+"Please select an option to continue: "+reset);
+            char choice = readMenuOption(SC, 'A', 'E');
 
             switch (choice) {
-                case 1 -> subMenuOption1();
-                case 2 -> subMenuOption2();
-                case 3 -> subMenuOption3();
-                case 4 -> subMenuOption4();
-                case 5 -> {
+                case 'A' -> subMenuOption1();
+                case 'B' -> subMenuOption2();
+                case 'C' -> subMenuOption3();
+                case 'D' -> subMenuOption4();
+                case 'E' -> {
                     System.out.println(green + "\nTurning the program off..." + reset);
                     System.out.println(red + "Thank you for using our program!" + reset);
                     return;
@@ -72,28 +72,50 @@ public class Main {
         }
     }
 
+    private static char readMenuOption(Scanner scan, char min, char max) {
+        while (true) {
+            String s = scan.nextLine().trim().toUpperCase();
+
+            if (s.isEmpty()) {
+                System.out.print(red + "Input cannot be empty. Please enter a letter between " + min + " and " + max + ": " + reset);
+                continue;
+            }
+            if (s.length() > 1){
+                System.out.print(red + "Invalid input. Please enter a single letter: " + reset);
+                continue;
+            }
+
+            char choice = s.charAt (0);
+            if (choice < min || choice > max) {
+                System.out.print(red + "Please enter a valid option letter between [" + min + "] and [" + max + "]: " + reset);
+                continue;
+            }
+            return choice;
+        }
+    }
+
+    // Basit sayısal okuma (B menüsü için)
     private static int readInt(Scanner scan, int min, int max) {
         while (true) {
             String s = scan.nextLine().trim();
+            if (s.isEmpty()) {
+                System.out.print(red + "Input cannot be empty. Please enter a number between " + min + " and " + max + ": " + reset);
+                continue;
+            }
             if (!s.matches("\\d+")) {
                 System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
                 continue;
             }
-
-            int val;
             try {
-                val = Integer.parseInt(s);
+                int val = Integer.parseInt(s);
+                if (val < min || val > max) {
+                    System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+                    continue;
+                }
+                return val;
             } catch (NumberFormatException e) {
                 System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
-                continue;
             }
-
-            if (val < min || val > max) {
-                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
-                continue;
-            }
-
-            return val;
         }
     }
 
@@ -111,19 +133,19 @@ public class Main {
     private static void subMenuOption1() {
         System.out.println("");
         while (true) {
-            System.out.println(red + "********************************" + reset);
-            System.out.println(cyan + "[1] Calculate Age and Zodiac Sign" + reset);
-            System.out.println(cyan + "[2] Reverse the Words" + reset);
-            System.out.println(cyan + "[3] Terminate" + reset);
-            System.out.println(red + "********************************" + reset);
-            System.out.print(green + "Please select an option to continue: " + reset);
-            int choice = readInt(SC, 1, 3);
+            System.out.println(red+"********************************"+reset);
+            System.out.println(cyan+"[A] Calculate Age and Zodiac Sign"+reset);
+            System.out.println(cyan+"[B] Reverse the Words"+reset);
+            System.out.println(cyan+"[C] Return To Main Menu"+reset);
+            System.out.println(red+"********************************"+reset);
+            System.out.print(green+"Please select an option to continue: "+reset);
+            char choice = readMenuOption(SC, 'A', 'C');
 
             switch (choice) {
-                case 1 -> ageAndZodiacSignDetection();
-                case 2 -> reverseTheWords();
-                case 3 -> {
-                    System.out.println(green + "\nReturning the main menu." + reset);
+                case 'A' -> ageAndZodiacSignDetection();
+                case 'B' -> reverseTheWords();
+                case 'C' -> {
+                    System.out.println(green + "\nReturning the main menu."+reset);
                     return;
                 }
             }
@@ -155,10 +177,7 @@ public class Main {
         while (days < 0) {
             int prevMonth = tempMonth - 1;
             int prevYear = tempYear;
-            if (prevMonth == 0) {
-                prevMonth = 12;
-                prevYear -= 1;
-            }
+            if (prevMonth == 0) { prevMonth = 12; prevYear -= 1; }
             int dim = getDaysInMonth(prevMonth, prevYear);
 
             days += dim;
@@ -168,14 +187,11 @@ public class Main {
             tempYear = prevYear;
         }
 
-        if (months < 0) {
-            years -= 1;
-            months += 12;
-        }
+        if (months < 0) { years -= 1; months += 12; }
 
         System.out.println(cyan + "Your age: " + years + " years, " + months + " months, " + days + " days" + reset);
         System.out.println(red + "Your zodiac sign is " + getZodiacString(birthDay, birthMonth) + "." + reset);
-        if (birthYear <= 1500) {
+        if (birthYear<=1500) {
             System.out.println(red + " Wow... You must be a time traveler! " + reset);
             System.out.println(yellow + "Are you sure you were born in " + birthYear + "?" + reset);
         }
@@ -243,7 +259,6 @@ public class Main {
                 System.out.print(red + "Please enter your day of birth: " + reset);
                 continue;
             }
-
             return val;
         }
     }
@@ -276,7 +291,6 @@ public class Main {
                 System.out.print(red + "Please enter your month of birth: " + reset);
                 continue;
             }
-
             return val;
         }
     }
@@ -316,54 +330,53 @@ public class Main {
                 System.out.print(red + "Please enter your year of birth: " + reset);
                 continue;
             }
-
             return val;
         }
     }
 
-    private static int getCurrentDay() {
-        return LocalDate.now().getDayOfMonth();
-    }
+    private static int getCurrentDay() { return LocalDate.now().getDayOfMonth(); }
+    private static int getCurrentMonth() { return LocalDate.now().getMonthValue(); }
+    private static int getCurrentYear() { return LocalDate.now().getYear(); }
 
-    private static int getCurrentMonth() {
-        return LocalDate.now().getMonthValue();
-    }
-
-    private static int getCurrentYear() {
-        return LocalDate.now().getYear();
-    }
-
-    /* Option A — Task 2: Reverse the Words (recursive per word) */
-
+    /* Option A — Task 2: Reverse the Words (recursive) */
     private static void reverseTheWords() {
-        System.out.print(yellow + "Please enter a sentence: " + reset);
-        String input = getTextInput();
+        String input = getTextInput(SC);
         if (!isReversed(input)) {
             System.out.println(red + "Input must contain at least 2 characters." + reset);
         } else {
-            String out = createReverseOutput(input);
-            System.out.println(cyan + "Reversed: " + out + reset);
+            String output = createReverseOutput(input);
+            System.out.println(yellow + "\nOriginal Text:\n" + reset + input);
+            System.out.println(cyan + "Reversed Words Text:\n" + reset + output);
         }
         System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
         SC.nextLine();
     }
 
-    private static String getTextInput() {
-        return SC.nextLine();
+    private static String getTextInput(Scanner scan) {
+        String s;
+        System.out.print(yellow + "Enter your text to be reversed: " + reset);
+        while (true){
+            s = scan.nextLine();
+            if (s.isEmpty()) {
+                System.out.print(red + "Input cannot be empty. Please enter your text: " + reset);
+                continue;
+            }
+            return s;
+        }
     }
 
+    // Kelime sırasını koruyup her kelimeyi özyinelemeyle ters çevir
     private static String createReverseOutput(String s) {
-        // Kelime sırasını koru, her kelimeyi recursive ters çevir
         StringBuilder sb = new StringBuilder();
         int i = 0;
         while (i < s.length()) {
-            // boşlukları koru
+            // whitespace'leri aynen aktar
             int j = i;
             while (j < s.length() && Character.isWhitespace(s.charAt(j))) j++;
             sb.append(s, i, j);
             if (j >= s.length()) break;
 
-            // kelimeyi al
+            // kelimeyi bul
             int k = j;
             while (k < s.length() && !Character.isWhitespace(s.charAt(k))) k++;
             String word = s.substring(j, k);
@@ -377,7 +390,7 @@ public class Main {
         return s != null && s.trim().length() >= 2;
     }
 
-    // Özyinelemeli olarak bir kelimeyi ters çevir
+    // Tek kelimeyi recursive ters çevir
     private static String reverseWordRec(String s) {
         if (s == null || s.length() <= 1) return s;
         return s.charAt(s.length() - 1) + reverseWordRec(s.substring(0, s.length() - 1));
@@ -388,27 +401,26 @@ public class Main {
      * Option B — Secondary School
      * =============================
      */
-
     private static void subMenuOption2() {
         while (true) {
-            System.out.println(red + "********************************" + reset);
-            System.out.println(cyan + "[1] Prime Numbers (comparison)" + reset);
-            System.out.println(cyan + "[2] Step-by-step Evaluation of Expression" + reset);
-            System.out.println(cyan + "[3] Terminate" + reset);
-            System.out.println(red + "********************************" + reset);
-            System.out.print(green + "Please select an option to continue: " + reset);
+            System.out.println(red+"********************************"+reset);
+            System.out.println(cyan+"[A] Prime Numbers (comparison)"+reset);
+            System.out.println(cyan+"[B] Step-by-step Evaluation of Expression"+reset);
+            System.out.println(cyan+"[C] Return To Main Menu"+reset);
+            System.out.println(red+"********************************"+reset);
+            System.out.print(green+"Please select an option to continue: "+reset);
+            char choice = readMenuOption(SC, 'A', 'C');
 
-            int choice = readInt(SC, 1, 3);
             switch (choice) {
-                case 1 -> primeNumbers();
-                case 2 -> {
+                case 'A' -> primeNumbers();
+                case 'B' -> {
                     System.out.println(yellow + "\nEnter an expression with digits and + - x × : ( )" + reset);
                     Expr.run(SC);
                     System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
                     SC.nextLine();
                 }
-                case 3 -> {
-                    System.out.println(green + "\nReturning the main menu." + reset);
+                case 'C' -> {
+                    System.out.println(green + "\nReturning the main menu."+reset);
                     return;
                 }
             }
@@ -416,16 +428,22 @@ public class Main {
         }
     }
 
-    /* Option B — Task 1: Prime Numbers */
-
-    static class R {
-        List<Integer> list;
-        long nanos;
-        R(List<Integer> l, long n) { list = l; nanos = n; }
-    }
+    /* Option B — Task 1: Prime Numbers (Eratosthenes / Sundaram / Atkin) */
+    static class R { List<Integer> list; long nanos; R(List<Integer> l,long n){list=l;nanos=n;} }
 
     private static void primeNumbers() {
-        int n = getPrimeNumberInput();
+        System.out.print(green + "Enter n (n >= 12): " + reset);
+        int n;
+        while (true) {
+            String s = SC.nextLine().trim();
+            try {
+                n = Integer.parseInt(s);
+                if (n < 12) throw new NumberFormatException();
+                break;
+            } catch (NumberFormatException e) {
+                System.out.print(red + "Invalid integer (>=12). Try again: " + reset);
+            }
+        }
 
         R er = measure(() -> Primes.sieveEratosthenes(n));
         R su = measure(() -> Primes.sieveSundaram(n));
@@ -447,22 +465,6 @@ public class Main {
         SC.nextLine();
     }
 
-    private static int getPrimeNumberInput() {
-        System.out.print(green + "Enter n (n >= 12): " + reset);
-        int n;
-        while (true) {
-            String s = SC.nextLine().trim();
-            try {
-                n = Integer.parseInt(s);
-                if (n < 12) throw new NumberFormatException();
-                break;
-            } catch (NumberFormatException e) {
-                System.out.print(red + "Invalid integer (>=12). Try again: " + reset);
-            }
-        }
-        return n;
-    }
-
     private static R measure(Supplier<List<Integer>> job) {
         long t0 = System.nanoTime();
         List<Integer> out = job.get();
@@ -474,9 +476,7 @@ public class Main {
         List<Integer> p = r.list;
         if (p.isEmpty()) { System.out.println("No primes."); return; }
         String first3 = p.stream().limit(3).map(String::valueOf).collect(Collectors.joining(","));
-        String last2 = p.size() >= 2
-                ? p.get(p.size() - 2) + "," + p.get(p.size() - 1)
-                : String.valueOf(p.get(p.size() - 1));
+        String last2 = p.size() >= 2 ? p.get(p.size()-2) + "," + p.get(p.size()-1) : String.valueOf(p.get(p.size()-1));
         System.out.printf("First3: %s | Last2: %s%n", first3, last2);
     }
 
@@ -497,9 +497,9 @@ public class Main {
             boolean[] isPrime = new boolean[n + 1];
             Arrays.fill(isPrime, true);
             isPrime[0] = false; if (n >= 1) isPrime[1] = false;
-            for (int p = 2; (long) p * p <= n; p++)
+            for (int p = 2; (long)p * p <= n; p++)
                 if (isPrime[p])
-                    for (long m = (long) p * p; m <= n; m += p) isPrime[(int) m] = false;
+                    for (long m = (long)p * p; m <= n; m += p) isPrime[(int)m] = false;
             List<Integer> out = new ArrayList<>();
             for (int i = 2; i <= n; i++) if (isPrime[i]) out.add(i);
             return out;
@@ -521,7 +521,7 @@ public class Main {
         public static List<Integer> sieveAtkin(int limit) {
             if (limit < 2) return Collections.emptyList();
             boolean[] sieve = new boolean[limit + 1];
-            int sqrt = (int) Math.sqrt(limit);
+            int sqrt = (int)Math.sqrt(limit);
             for (int x = 1; x <= sqrt; x++) {
                 int x2 = x * x;
                 for (int y = 1; y <= sqrt; y++) {
@@ -543,9 +543,7 @@ public class Main {
     }
 
     /* Option B — Task 2: Step-by-step Evaluation of Expression */
-
     static class Expr {
-
         static void run(Scanner sc) {
             while (true) {
                 String expr = sc.nextLine();
@@ -576,6 +574,7 @@ public class Main {
             if (isOp(t.charAt(0)) || isOp(t.charAt(t.length() - 1))) return false;
             if (t.contains(")(") || t.matches(".*\\d\\(.*") || t.matches(".*\\)\\d.*")) return false;
 
+            // parantez dengesi
             int bal = 0;
             for (char c : t.toCharArray()) {
                 if (c == '(') bal++;
@@ -584,6 +583,7 @@ public class Main {
             }
             if (bal != 0) return false;
 
+            // en az bir sayı olmalı; sayı-adedi kontrolü ve operatör kontrolü
             String[] parts = s.trim().split("[^0-9]+");
             int count = 0;
             for (String p : parts) if (!p.isEmpty()) count++;
@@ -600,6 +600,7 @@ public class Main {
         }
 
         private static String normalize(String s) {
+            // × ve x -> *, : -> /, − -> -
             return s.replace('×','*')
                     .replace('x','*')
                     .replace(':','/')
@@ -608,6 +609,7 @@ public class Main {
         }
 
         private static String denorm(String s) {
+            // çıktıda * yerine x, / yerine :
             return s.replace('*','x').replace('/',':');
         }
 
@@ -625,6 +627,7 @@ public class Main {
             s = stripOuter(s);
             if (s.matches("[+-]?\\d+")) return s;
 
+            // önce en iç parantez
             int open = -1, close = -1;
             for (int i = 0; i < s.length(); i++) {
                 if (s.charAt(i) == '(') open = i;
@@ -637,6 +640,7 @@ public class Main {
                 return reduce(next);
             }
 
+            // çarpma/bölme
             for (int i = 0; i < s.length(); i++) {
                 char c = s.charAt(i);
                 if ((c == '*' || c == '/') && i > 0 && Character.isDigit(s.charAt(i - 1))) {
@@ -646,6 +650,7 @@ public class Main {
                 }
             }
 
+            // toplama/çıkarma
             for (int i = 0; i < s.length(); i++) {
                 char c = s.charAt(i);
                 if ((c == '+' || c == '-') && i > 0 && Character.isDigit(s.charAt(i - 1))) {
