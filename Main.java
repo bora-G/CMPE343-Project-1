@@ -1,7 +1,6 @@
 import java.time.LocalDate;
-import java.util.Arrays; // Sieve algoritmaları için gerekli (Arrays.fill)
+import java.util.Arrays;
 import java.util.Scanner;
-// ArrayList, Collectors, Supplier, Set vb. import'ları kaldırıldı.
 
 public class Main {
 
@@ -94,6 +93,7 @@ public class Main {
         }
     }
 
+    // Basit sayısal okuma (B menüsü için)
     private static int readInt(Scanner scan, int min, int max) {
         while (true) {
             String s = scan.nextLine().trim();
@@ -224,6 +224,7 @@ public class Main {
         return (year % 400 == 0) || (year % 4 == 0 && year % 100 != 0);
     }
 
+    // Day validator using provided birth month/year (prevents dates like 31/04)
     private static int getDay(Scanner scan, int month, int year) {
         while (true) {
             String s = scan.nextLine().trim();
@@ -337,9 +338,8 @@ public class Main {
     private static int getCurrentYear() { return LocalDate.now().getYear(); }
 
     /* Option A — Task 2: Reverse the Words (recursive) */
-    
     private static void reverseTheWords() {
-        String input = getTextInput(SC); 
+        String input = getTextInput(SC);
         if (!isReversed(input)) {
             System.out.println(red + "Input must contain at least 2 characters." + reset);
         } else {
@@ -363,9 +363,8 @@ public class Main {
         }
     }
     
-    // StringBuilder KULLANILMAYAN versiyon
     private static String createReverseOutput(String s) {
-        String result = ""; // StringBuilder yerine basit String birleştirme
+        String result = "";
         int i = 0;
         
         while (i < s.length()) {
@@ -379,9 +378,9 @@ public class Main {
                 String word = s.substring(i, j);
                 
                 if (word.length() >= 2) {
-                    result += reverseWordRec(word); // Basit birleştirme
+                    result += reverseWordRec(word);
                 } else {
-                    result += word; // Basit birleştirme
+                    result += word;
                 }
                 i = j; 
             } else {
@@ -390,7 +389,7 @@ public class Main {
                     j++;
                 }
                 String nonWord = s.substring(i, j);
-                result += nonWord; // Basit birleştirme
+                result += nonWord; 
                 i = j;
             }
         }
