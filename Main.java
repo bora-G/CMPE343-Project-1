@@ -1,8 +1,5 @@
 import java.time.LocalDate;
-import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -353,77 +350,474 @@ public class Main {
         System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
         SC.nextLine();
     }
-
-    private static int arraySize() {
-        return 0;
-    }
-
-    private static ArrayList<Integer> getElement() {
-        return new ArrayList<>();
-    }
-
-    private static double calculateMedian() {
-        return 0.0;
-    }
-
-    private static double calculateArithmeticMedian() {
-        return 0.0;
-    }
-
-    private static double calculateGeometricMedian() {
-        return 0.0;
-    }
-
-    private static double calculateHarmonicMedian() {
-        return 0.0;
-    } // !!! Should be computed recursively
-
-    // Kelime sırasını koruyup her kelimeyi özyinelemeyle ters çevir
-    private static String createReverseOutput(String s) {
-        StringBuilder sb = new StringBuilder();
-        int i = 0;
-        while (i < s.length()) {
-            // whitespace'leri aynen aktar
-            int j = i;
-            while (j < s.length() && Character.isWhitespace(s.charAt(j))) j++;
-            sb.append(s, i, j);
-            if (j >= s.length()) break;
-
-            // kelimeyi bul
-            int k = j;
-            while (k < s.length() && !Character.isWhitespace(s.charAt(k))) k++;
-            String word = s.substring(j, k);
-            sb.append(reverseWordRec(word));
-            i = k;
+    
+    private static String getTextInput(Scanner scan) {
+        System.out.print(green + "Enter the text to reverse words in (Türkçe karakterler dahil): " + reset);
+        while (true) {
+            String s = scan.nextLine();
+            if (s.trim().isEmpty()) {
+                System.out.print(red + "Input cannot be empty. Please enter your text: " + reset);
+                continue;
+            }
+            return s;
         }
-        return sb.toString();
+    }
+    
+    private static String createReverseOutput(String s) {
+        String result = "";
+        int i = 0;
+        
+        while (i < s.length()) {
+            char startChar = s.charAt(i);
+
+            if (Character.isLetter(startChar)) {
+                int j = i;
+                while (j < s.length() && Character.isLetter(s.charAt(j))) {
+                    j++;
+                }
+                String word = s.substring(i, j);
+                
+                if (word.length() >= 2) {
+                    result += reverseWordRec(word);
+                } else {
+                    result += word;
+                }
+                i = j; 
+            } else {
+                int j = i;
+                while (j < s.length() && !Character.isLetter(s.charAt(j))) {
+                    j++;
+                }
+                String nonWord = s.substring(i, j);
+                result += nonWord; 
+                i = j;
+            }
+        }
+        return result;
     }
 
     private static boolean isReversed(String s) {
         return s != null && s.trim().length() >= 2;
     }
-
-    // Get dimension from user with using java.util.Scanner.
-    private static int getDimension() {
-        return 0;
+    
+    private static String reverseWordRec(String s) {
+        if (s == null || s.length() <= 1) {
+            return s;
+        }
+        return reverseWordRec(s.substring(1)) + s.charAt(0);
     }
 
-    // Check entered dimension is valid or not.
-    private static boolean isValidDimension() {
-        return false;
+    /*
+     * =============================
+     * Option B — Secondary School
+     * =============================
+     */
+
+    private static void subMenuOption2() {
+        while (true) {
+            System.out.println(red+"********************************"+reset);
+            System.out.println(cyan+"[A] Prime Numbers"+reset);
+            System.out.println(cyan+"[B] Step-by-step Evaluation of Expression"+reset);
+            System.out.println(cyan+"[C] Return To Main Menu"+reset);
+            System.out.println(red+"********************************"+reset);
+            System.out.print(green+"Please select an option to continue: "+reset);
+            char choice = readMenuOption(SC, 'A', 'C');
+
+            switch (choice) {
+                case 'A' -> primeNumbers();
+                case 'B' -> evaluationOfExpression();
+                case 'C' -> {
+                    System.out.println(green + "\nReturning the main menu."+reset);
+                    return;
+                }
+            }
+            clearScreen();
+        }
     }
 
-    private static int calculateManhattanDistance() {
-        return 0;
+    /* Option B — Task 1: Prime Numbers */
+
+    private static void primeNumbers() {
+        clearScreen();
+        System.out.println(cyan + "--- Prime Numbers (Sieve Algorithms) ---" + reset);
+        int n = getPrimeNumberInput();
+        
+        System.out.println(yellow + "\nCalculating primes up to " + n + "..." + reset);
+
+        long startE = System.nanoTime();
+        int[] primesE = sieveEratosthenes(n); // ArrayList yerine int[]
+        long timeE = System.nanoTime() - startE;
+        printPrimeSummary("Eratosthenes", primesE, timeE);
+        
+        long startS = System.nanoTime();
+        int[] primesS = sieveSundaram(n); // ArrayList yerine int[]
+        long timeS = System.nanoTime() - startS;
+        printPrimeSummary("Sundaram", primesS, timeS);
+        
+        long startA = System.nanoTime();
+        int[] primesA = sieveAtkin(n); // ArrayList yerine int[]
+        long timeA = System.nanoTime() - startA;
+        printPrimeSummary("Atkin", primesA, timeA);
+        
+        System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
+        SC.nextLine();
     }
 
-    private static int calculateEuclideanDistance() {
-        return 0;
+    private static int getPrimeNumberInput() {
+        System.out.print(green + "Enter the upper limit (n >= 12): " + reset);
+        while (true) {
+            String s = SC.nextLine().trim();
+            if (!s.matches("\\d+")) {
+                System.out.print(red + "Invalid input. Please enter a number (n >= 12): " + reset);
+                continue;
+            }
+            try {
+                int val = Integer.parseInt(s);
+                if (val < 12) {
+                    System.out.print(red + "Please enter a number >= 12: " + reset);
+                    continue;
+                }
+                return val;
+            } catch (NumberFormatException e) {
+                System.out.print(red + "Invalid number (too large). Please re-enter: " + reset);
+            }
+        }
+    }
+    
+    // ArrayList yerine int[] (temel dizi) alacak şekilde güncellendi
+    private static void printPrimeSummary(String name, int[] p, long nanos) {
+        System.out.printf("Method: %s | Time: %.3f ms | ", name, nanos / 1_000_000.0);
+        if (p.length == 0) { System.out.println("No primes."); return; }
+
+        String first3 = "";
+        for(int i = 0; i < p.length && i < 3; i++) {
+            first3 += p[i];
+            if (i < 2 && i < p.length - 1) first3 += ",";
+        }
+
+        String last2 = "";
+        if (p.length >= 2) {
+            last2 = p[p.length-2] + "," + p[p.length-1];
+        } else if (p.length == 1) {
+            last2 = String.valueOf(p[0]);
+        }
+        
+        System.out.printf("First3: %s | Last2: %s%n", first3, last2);
     }
 
-    private static int calculateCosineSimilarity() {
-        return 0;
+    // ArrayList yerine int[] (temel dizi) döndürecek şekilde güncellendi
+    private static int[] sieveEratosthenes(int n) {
+        if (n < 2) return new int[0]; // Boş temel dizi
+        boolean[] isPrime = new boolean[n + 1];
+        Arrays.fill(isPrime, true);
+        isPrime[0] = false; if (n >= 1) isPrime[1] = false;
+        
+        for (int p = 2; (long)p * p <= n; p++)
+            if (isPrime[p])
+                for (long m = (long)p * p; m <= n; m += p) isPrime[(int)m] = false;
+        
+        // 1. Asalları say
+        int count = 0;
+        for (int i = 2; i <= n; i++) if (isPrime[i]) count++;
+        
+        // 2. Diziye yerleştir
+        int[] primes = new int[count];
+        int index = 0;
+        for (int i = 2; i <= n; i++) if (isPrime[i]) primes[index++] = i;
+        
+        return primes;
     }
+
+    // ArrayList yerine int[] (temel dizi) döndürecek şekilde güncellendi
+    private static int[] sieveSundaram(int n) {
+        if (n < 2) return new int[0]; // Boş temel dizi
+        int k = (n - 1) / 2;
+        boolean[] marked = new boolean[k + 1];
+        
+        for (int i = 1; i <= k; i++)
+            for (int j = i; i + j + 2 * i * j <= k; j++)
+                marked[i + j + 2 * i * j] = true;
+        
+        // 1. Asalları say (2'yi de sayarak)
+        int count = 1; // 2 için
+        for (int i = 1; i <= k; i++) if (!marked[i]) count++;
+        
+        // 2. Diziye yerleştir
+        int[] primes = new int[count];
+        primes[0] = 2;
+        int index = 1;
+        for (int i = 1; i <= k; i++) if (!marked[i]) primes[index++] = 2 * i + 1;
+        
+        return primes;
+    }
+
+    // ArrayList yerine int[] (temel dizi) döndürecek şekilde güncellendi
+    private static int[] sieveAtkin(int limit) {
+        if (limit < 2) return new int[0]; // Boş temel dizi
+        boolean[] sieve = new boolean[limit + 1];
+        int sqrt = (int)Math.sqrt(limit);
+        
+        for (int x = 1; x <= sqrt; x++) {
+            int x2 = x * x;
+            for (int y = 1; y <= sqrt; y++) {
+                int y2 = y * y, n;
+                n = 4 * x2 + y2; if (n <= limit && (n % 12 == 1 || n % 12 == 5)) sieve[n] ^= true;
+                n = 3 * x2 + y2; if (n <= limit &&  n % 12 == 7)                 sieve[n] ^= true;
+                n = 3 * x2 - y2; if (x > y && n <= limit && n % 12 == 11)        sieve[n] ^= true;
+            }
+        }
+        for (int r = 5; r <= sqrt; r++)
+            if (sieve[r])
+                for (int m = r * r; m <= limit; m += r * r) sieve[m] = false;
+        
+        // 1. Asalları say (2 ve 3'ü de sayarak)
+        int count = 0;
+        if (limit >= 2) count++;
+        if (limit >= 3) count++;
+        for (int a = 5; a <= limit; a++) if (sieve[a]) count++;
+        
+        // 2. Diziye yerleştir
+        int[] primes = new int[count];
+        int index = 0;
+        if (limit >= 2) primes[index++] = 2;
+        if (limit >= 3) primes[index++] = 3;
+        for (int a = 5; a <= limit; a++) if (sieve[a]) primes[index++] = a;
+        
+        return primes;
+    }
+
+    /* Option B — Task 2: Step-by-step Evaluation of Expression */
+
+    private static void evaluationOfExpression() {
+        clearScreen();
+        System.out.println(cyan + "--- Step-by-step Evaluation of Expression ---" + reset);
+        System.out.print(green + "Enter an expression with digits and + - x × : ( ): " + reset);
+        
+        while (true) {
+            String expr = SC.nextLine();
+
+            if (!exprIsValid(expr)) {
+                System.out.println(red + "Invalid input. Please re-enter a valid expression." + reset);
+                System.out.print(green + "Enter an expression with digits and + - x × : ( ): " + reset);
+                continue;
+            }
+
+            try {
+                exprEvaluate(expr);
+                break;
+            } catch (ArithmeticException e) {
+                System.out.println(red + "Error: Division by zero! Please re-enter a valid expression." + reset);
+                System.out.print(green + "Enter an expression with digits and + - x × : ( ): " + reset);
+            }
+        }
+        
+        System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
+        SC.nextLine();
+    }
+    
+    private static boolean exprIsValid(String s) {
+        if (s == null || s.trim().isEmpty()) return false;
+        if (!s.matches("[0-9\\s\\+\\-x×:()]+")) return false;
+
+        String t = exprNormalize(s);
+        if (t.isEmpty()) return false;
+        
+        if (isOp(t.charAt(0)) && t.charAt(0) != '-') return false; 
+        if (isOp(t.charAt(t.length() - 1))) return false;
+        
+        if (t.contains(")(") || t.matches(".*\\d\\(.*") || t.matches(".*\\)\\d.*")) return false;
+
+        int bal = 0;
+        for (int i=0; i < t.length(); i++) {
+            char c = t.charAt(i);
+            if (c == '(') bal++;
+            else if (c == ')') bal--;
+            if (bal < 0) return false;
+        }
+        if (bal != 0) return false;
+
+        for (int i = 1; i < t.length(); i++) {
+            char c = t.charAt(i), p = t.charAt(i - 1);
+            if (isOp(c)) {
+                if (p == '(' && c != '-') return false; 
+                if (isOp(p) && c != '-') return false; 
+            }
+        }
+        return true;
+    }
+
+    private static String exprNormalize(String s) {
+        return s.replace('×','*')
+                .replace('x','*')
+                .replace(':','/')
+                .replace('−','-')
+                .replaceAll("\\s+", "");
+    }
+
+    private static String exprDenorm(String s) {
+        return s.replace('*','x').replace('/',':');
+    }
+
+    private static boolean isOp(char c) {
+        return c=='+'||c=='-'||c=='*'||c=='/';
+    }
+
+    private static void exprEvaluate(String expr) {
+        String e = exprNormalize(expr);
+        System.out.println("= " + exprDenorm(e)); 
+        String result = exprReduce(e);
+        if (!e.equals(result)) { 
+             System.out.println("= " + exprDenorm(result));
+        }
+    }
+
+    private static String exprReduce(String s) {
+        s = exprStripOuter(s);
+        if (s.matches("^-?\\d+$")) return s;
+
+        int open = -1, close = -1;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') open = i;
+            else if (s.charAt(i) == ')' && open != -1) { 
+                close = i; 
+                String inside = exprReduce(s.substring(open + 1, close));
+                String next = s.substring(0, open) + inside + s.substring(close + 1);
+                System.out.println("= " + exprDenorm(next));
+                return exprReduce(next);
+            }
+        }
+
+        int opIdx = -1;
+         for (int i = 0; i < s.length(); i++) {
+             if (s.charAt(i) == '*' || s.charAt(i) == '/') {
+                 opIdx = i;
+                 break;
+             }
+         }
+         if (opIdx != -1) {
+             String next = exprApplyOp(s, opIdx);
+             System.out.println("= " + exprDenorm(next));
+             return exprReduce(next);
+         }
+
+         opIdx = -1;
+         for (int i = 1; i < s.length(); i++) { 
+             if (s.charAt(i) == '+' || s.charAt(i) == '-') {
+                 if (!isOp(s.charAt(i-1)) && s.charAt(i-1) != '(') {
+                     opIdx = i;
+                     break;
+                 }
+             }
+         }
+         if (opIdx != -1) {
+             String next = exprApplyOp(s, opIdx);
+             System.out.println("= " + exprDenorm(next));
+             return exprReduce(next);
+         }
+
+        return s;
+    }
+
+    private static String exprApplyOp(String s, int idx) {
+        int L = idx - 1;
+        while (L >= 0 && Character.isDigit(s.charAt(L))) L--;
+        if (L >= 0 && s.charAt(L) == '-' && (L == 0 || isOp(s.charAt(L-1)) || s.charAt(L-1) == '(')) {
+        } else {
+            L++; 
+        }
+
+        int R = idx + 1;
+        if (R < s.length() && s.charAt(R) == '-') { 
+            R++;
+        }
+        while (R < s.length() && Character.isDigit(s.charAt(R))) R++;
+        
+        String left = s.substring(L, idx);
+        String right = s.substring(idx + 1, R);
+
+        long a = Long.parseLong(left);
+        long b = Long.parseLong(right);
+        long res;
+
+        switch (s.charAt(idx)) {
+            case '*' -> res = a * b;
+            case '/' -> {
+                if (b == 0) throw new ArithmeticException("Division by zero");
+                res = a / b;
+            }
+            case '+' -> res = a + b;
+            default  -> res = a - b; 
+        }
+        
+        String resultStr = String.valueOf(res);
+        if (res < 0 && L > 0 && s.charAt(L-1) == '+') {
+             return s.substring(0, L-1) + resultStr + s.substring(R);
+        }
+
+        return s.substring(0, L) + resultStr + s.substring(R);
+    }
+
+    private static String exprStripOuter(String s) {
+        while (s.startsWith("(") && s.endsWith(")")) {
+            int bal = 0; boolean ok = true;
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) == '(') bal++;
+                else if (s.charAt(i) == ')') bal--;
+                if (bal == 0 && i < s.length() - 1) { ok = false; break; }
+            }
+            if (ok) s = s.substring(1, s.length() - 1);
+            else break;
+        }
+        return s;
+    }
+
+    /*
+     * =============================
+     * Option C — High School
+     * =============================
+     */
+     
+    private static void subMenuOption3() {
+        while (true) {
+            System.out.println(red+"********************************"+reset);
+            System.out.println(cyan+"[A] Statistical Information about an Array"+reset);
+            System.out.println(cyan+"[B] Distance between Two Arrays"+reset);
+            System.out.println(cyan+"[C] Return To Main Menu"+reset);
+            System.out.println(red+"********************************"+reset);
+            System.out.print(green+"Please select an option to continue: "+reset);
+            char choice = readMenuOption(SC, 'A', 'C');
+            
+            switch (choice) {
+                case 'A' -> statisticalInformation();
+                case 'B' -> distanceBetweenTwoArrays();
+                case 'C' -> {
+                    System.out.println(green + "\nReturning the main menu."+reset);
+                    return;
+                }
+            }
+            clearScreen();
+        }
+    }
+    
+    private static void statisticalInformation() {
+         System.out.println(yellow + "This feature is not implemented yet. Press ENTER to return." + reset);
+         SC.nextLine();
+    }
+    
+    private static void distanceBetweenTwoArrays() {
+         System.out.println(yellow + "This feature is not implemented yet. Press ENTER to return." + reset);
+         SC.nextLine();
+    }
+
+    private static int arraySize() { return 0; }
+    // ArrayList yerine int[] (temel dizi) döndürecek şekilde güncellendi
+    private static int[] getElement() { return new int[0]; } 
+    private static double calculateMedian() { return 0.0; }
+    private static double calculateArithmeticMedian() { return 0.0; }
+    private static double calculateGeometricMedian() { return 0.0; }
+    private static double calculateHarmonicMedian() { return 0.0; }
+    private static int getDimension() { return 0; }
+
 
     /*
      * =============================
@@ -431,240 +825,9 @@ public class Main {
      * =============================
      */
 
-    // (Stubs only; implement later)
     private static void subMenuOption4() {
-        // TODO: Board size (5x4, 6x5, 7x6) and mode (1P vs CPU / 2P)
-    }
-
-    private static void printPrimeSummary(String name, R r) {
-        System.out.printf("Method: %s | Time: %.3f ms | ", name, r.nanos / 1_000_000.0);
-        List<Integer> p = r.list;
-        if (p.isEmpty()) { System.out.println("No primes."); return; }
-        String first3 = p.stream().limit(3).map(String::valueOf).collect(Collectors.joining(","));
-        String last2 = p.size() >= 2 ? p.get(p.size()-2) + "," + p.get(p.size()-1) : String.valueOf(p.get(p.size()-1));
-        System.out.printf("First3: %s | Last2: %s%n", first3, last2);
-    }
-
-    private static void printDiff(String name, List<Integer> ref, List<Integer> other) {
-        Set<Integer> missing = new LinkedHashSet<>(ref);   missing.removeAll(other);
-        Set<Integer> extra   = new LinkedHashSet<>(other); extra.removeAll(ref);
-        if (missing.isEmpty() && extra.isEmpty())
-            System.out.println("  " + name + ": (no difference)");
-        else {
-            System.out.println("  " + name + " missing vs ref: " + missing);
-            System.out.println("  " + name + " extra   vs ref: " + extra);
-        }
-    }
-
-    static class Primes {
-        public static List<Integer> sieveEratosthenes(int n) {
-            if (n < 2) return Collections.emptyList();
-            boolean[] isPrime = new boolean[n + 1];
-            Arrays.fill(isPrime, true);
-            isPrime[0] = false; if (n >= 1) isPrime[1] = false;
-            for (int p = 2; (long)p * p <= n; p++)
-                if (isPrime[p])
-                    for (long m = (long)p * p; m <= n; m += p) isPrime[(int)m] = false;
-            List<Integer> out = new ArrayList<>();
-            for (int i = 2; i <= n; i++) if (isPrime[i]) out.add(i);
-            return out;
-        }
-
-        public static List<Integer> sieveSundaram(int n) {
-            if (n < 2) return Collections.emptyList();
-            int k = (n - 1) / 2;
-            boolean[] marked = new boolean[k + 1];
-            for (int i = 1; i <= k; i++)
-                for (int j = i; i + j + 2 * i * j <= k; j++)
-                    marked[i + j + 2 * i * j] = true;
-            List<Integer> out = new ArrayList<>();
-            out.add(2);
-            for (int i = 1; i <= k; i++) if (!marked[i]) out.add(2 * i + 1);
-            return out;
-        }
-
-        public static List<Integer> sieveAtkin(int limit) {
-            if (limit < 2) return Collections.emptyList();
-            boolean[] sieve = new boolean[limit + 1];
-            int sqrt = (int)Math.sqrt(limit);
-            for (int x = 1; x <= sqrt; x++) {
-                int x2 = x * x;
-                for (int y = 1; y <= sqrt; y++) {
-                    int y2 = y * y, n;
-                    n = 4 * x2 + y2; if (n <= limit && (n % 12 == 1 || n % 12 == 5)) sieve[n] ^= true;
-                    n = 3 * x2 + y2; if (n <= limit &&  n % 12 == 7)                 sieve[n] ^= true;
-                    n = 3 * x2 - y2; if (x > y && n <= limit && n % 12 == 11)        sieve[n] ^= true;
-                }
-            }
-            for (int r = 5; r <= sqrt; r++)
-                if (sieve[r])
-                    for (int m = r * r; m <= limit; m += r * r) sieve[m] = false;
-            List<Integer> primes = new ArrayList<>();
-            if (limit >= 2) primes.add(2);
-            if (limit >= 3) primes.add(3);
-            for (int a = 5; a <= limit; a++) if (sieve[a]) primes.add(a);
-            return primes;
-        }
-    }
-
-    /* Option B — Task 2: Step-by-step Evaluation of Expression */
-    static class Expr {
-        static void run(Scanner sc) {
-            while (true) {
-                String expr = sc.nextLine();
-
-                if (!isValid(expr)) {
-                    System.out.println("Invalid input. Please re-enter a valid expression.");
-                    System.out.print("Enter an expression with digits and + - x × : ( ): ");
-                    continue;
-                }
-
-                try {
-                    evaluate(expr);
-                    System.out.println("Done.");
-                    break;
-                } catch (ArithmeticException e) {
-                    System.out.println("Error: Division by zero! Please re-enter a valid expression.");
-                    System.out.print("Enter an expression with digits and + - x × : ( ): ");
-                }
-            }
-        }
-
-        private static boolean isValid(String s) {
-            if (s == null || s.trim().isEmpty()) return false;
-            if (!s.matches("[0-9\\s\\+\\-x×:()]+")) return false;
-
-            String t = normalize(s);
-            if (t.isEmpty()) return false;
-            if (isOp(t.charAt(0)) || isOp(t.charAt(t.length() - 1))) return false;
-            if (t.contains(")(") || t.matches(".*\\d\\(.*") || t.matches(".*\\)\\d.*")) return false;
-
-            // parantez dengesi
-            int bal = 0;
-            for (char c : t.toCharArray()) {
-                if (c == '(') bal++;
-                else if (c == ')') bal--;
-                if (bal < 0) return false;
-            }
-            if (bal != 0) return false;
-
-            // en az bir sayı olmalı; sayı-adedi kontrolü ve operatör kontrolü
-            String[] parts = s.trim().split("[^0-9]+");
-            int count = 0;
-            for (String p : parts) if (!p.isEmpty()) count++;
-            if (!t.matches(".*[+\\-*/].*") && count > 1) return false;
-
-            for (int i = 1; i < t.length(); i++) {
-                char c = t.charAt(i), p = t.charAt(i - 1);
-                if (isOp(c)) {
-                    if (p == '(' && c != '-') return false;
-                    if (isOp(p) && c != '-') return false;
-                }
-            }
-            return true;
-        }
-
-        private static String normalize(String s) {
-            // × ve x -> *, : -> /, − -> -
-            return s.replace('×','*')
-                    .replace('x','*')
-                    .replace(':','/')
-                    .replace('−','-')
-                    .replaceAll("\\s+", "");
-        }
-
-        private static String denorm(String s) {
-            // çıktıda * yerine x, / yerine :
-            return s.replace('*','x').replace('/',':');
-        }
-
-        private static boolean isOp(char c) {
-            return c=='+'||c=='-'||c=='*'||c=='/';
-        }
-
-        private static void evaluate(String expr) {
-            String e = normalize(expr);
-            String result = reduce(e);
-            System.out.println("= " + denorm(result));
-        }
-
-        private static String reduce(String s) {
-            s = stripOuter(s);
-            if (s.matches("[+-]?\\d+")) return s;
-
-            // önce en iç parantez
-            int open = -1, close = -1;
-            for (int i = 0; i < s.length(); i++) {
-                if (s.charAt(i) == '(') open = i;
-                else if (s.charAt(i) == ')' && open != -1) { close = i; break; }
-            }
-            if (open != -1 && close != -1) {
-                String inside = reduce(s.substring(open + 1, close));
-                String next = s.substring(0, open) + inside + s.substring(close + 1);
-                System.out.println("= " + denorm(next));
-                return reduce(next);
-            }
-
-            // çarpma/bölme
-            for (int i = 0; i < s.length(); i++) {
-                char c = s.charAt(i);
-                if ((c == '*' || c == '/') && i > 0 && Character.isDigit(s.charAt(i - 1))) {
-                    String next = applyOp(s, i);
-                    System.out.println("= " + denorm(next));
-                    return reduce(next);
-                }
-            }
-
-            // toplama/çıkarma
-            for (int i = 0; i < s.length(); i++) {
-                char c = s.charAt(i);
-                if ((c == '+' || c == '-') && i > 0 && Character.isDigit(s.charAt(i - 1))) {
-                    String next = applyOp(s, i);
-                    System.out.println("= " + denorm(next));
-                    return reduce(next);
-                }
-            }
-            return s;
-        }
-
-        private static String applyOp(String s, int idx) {
-            int L = idx - 1;
-            while (L >= 0 && Character.isDigit(s.charAt(L))) L--;
-            String left = s.substring(L + 1, idx);
-
-            int R = idx + 1;
-            while (R < s.length() && (Character.isDigit(s.charAt(R)) || s.charAt(R) == '-')) R++;
-            String right = s.substring(idx + 1, R);
-
-            long a = Long.parseLong(left);
-            long b = Long.parseLong(right);
-            long res;
-
-            switch (s.charAt(idx)) {
-                case '*' -> res = a * b;
-                case '/' -> {
-                    if (b == 0) throw new ArithmeticException("Division by zero");
-                    res = a / b;
-                }
-                case '+' -> res = a + b;
-                default  -> res = a - b;
-            }
-            return s.substring(0, L + 1) + res + s.substring(R);
-        }
-
-        private static String stripOuter(String s) {
-            while (s.startsWith("(") && s.endsWith(")")) {
-                int bal = 0; boolean ok = true;
-                for (int i = 0; i < s.length(); i++) {
-                    if (s.charAt(i) == '(') bal++;
-                    else if (s.charAt(i) == ')') bal--;
-                    if (bal == 0 && i < s.length() - 1) { ok = false; break; }
-                }
-                if (ok) s = s.substring(1, s.length() - 1);
-                else break;
-            }
-            return s;
-        }
+         System.out.println(yellow + "This feature is not implemented yet. Press ENTER to return." + reset);
+         SC.nextLine();
     }
 
     private static boolean checkWin() {
@@ -680,14 +843,9 @@ public class Main {
      * Program Entry Point
      * =============================
      */
-
-    /*
-     * =============================
-     * Program Entry Point
-     * =============================
-     */
     public static void main(String[] args) {
         welcomeMessage();
         mainMenu();
+        SC.close(); 
     }
 }
