@@ -1,5 +1,5 @@
-import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -15,6 +15,12 @@ public class Main {
     private static String green = "\u001B[32m";
     private static String reset = "\u001B[0m";
     private static String red = "\u001B[31m";
+    // For ConnectFourGame
+    private static int ROWS, COLS;
+    private static char[][] board;
+    private static char currentPlayer; // 'X' or 'O'
+    private static boolean singlePlayer; // true => 1P vs CPU
+    private static final java.util.Random RNG = new java.util.Random();
 
     private static void welcomeMessage() {
         clearScreen();
@@ -34,9 +40,9 @@ public class Main {
         System.out.println(green + "-----------------------------------------------" + reset);
         System.out.println(green + "Group Members:" + reset);
         System.out.println(cyan + " - Bora Görgün" + reset);
-        System.out.println(cyan + " - [Member 2]" + reset);
-        System.out.println(cyan + " - [Member 3]" + reset);
-        System.out.println(cyan + " - [Member 4]" + reset);
+        System.out.println(cyan + " - Can Ersan" + reset);
+        System.out.println(cyan + " - Melek Sadiki" + reset);
+        System.out.println(cyan + " - Mikail Karacaer" + reset);
         System.out.println();
         System.out.println(yellow + "Press ENTER to continue..." + reset);
 
@@ -46,30 +52,30 @@ public class Main {
 
     private static void mainMenu() {
         while (true) {
-            System.out.println(red+"********************************"+reset);
-            System.out.println(cyan+"[1] Primary School"+reset);
-            System.out.println(cyan+"[2] Secondary School"+reset);
-            System.out.println(cyan+"[3] High Schooll"+reset);
-            System.out.println(cyan+"[4] University"+reset);
-            System.out.println(cyan+"[5] Terminate"+reset);
-            System.out.println(red+"********************************"+reset);
-            System.out.println(green+"Please select an option to continue: "+reset);
-            int choice = readInt(SC, 1, 5);
+            System.out.println(red + "********************************" + reset);
+            System.out.println(cyan + "[A] Primary School" + reset);
+            System.out.println(cyan + "[B] Secondary School" + reset);
+            System.out.println(cyan + "[C] High School" + reset);
+            System.out.println(cyan + "[D] University" + reset);
+            System.out.println(cyan + "[E] Terminate" + reset);
+            System.out.println(red + "********************************" + reset);
+            System.out.println(green + "Please select an option to continue: " + reset);
+            int choice = readMenuOption(SC, 'A', 'E');
 
             switch (choice) {
-                case 1:
+                case 'A':
                     subMenuOption1();
                     break;
-                case 2:
+                case 'B':
                     subMenuOption2();
                     break;
-                case 3:
+                case 'C':
                     subMenuOption3();
                     break;
-                case 4:
+                case 'D':
                     subMenuOption4();
                     break;
-                case 5:
+                case 'E':
                     System.out.println(green + "\nTurning the program off...");
                     System.out.println(red + "Thank you for using our program!");
                     return;
@@ -78,30 +84,69 @@ public class Main {
         }
     }
 
-    private static int readInt(Scanner scan, int min, int max) {
+    private static char readMenuOption(Scanner scan, char min, char max) {
         while (true) {
-            String s = scan.nextLine().trim();
-            if (!s.matches("\\d+")) {
-                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+            String s = scan.nextLine().trim().toUpperCase();
+
+            if (s.isEmpty()) {
+                System.out.print(red + "Input cannot be empty. Please enter a letter between " + min + " and " + max
+                        + ": " + reset);
                 continue;
             }
 
-            int val;
-            try {
-                val = Integer.parseInt(s);
-            } catch (NumberFormatException e) {
-                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+            if (s.length() > 1) {
+                System.out.print(red + "Invalid input. Please enter a single letter: " + reset);
                 continue;
+
             }
 
-            if (val < min || val > max) {
-                System.out.print(red + "Please enter a number between " + min + " and " + max + ": " + reset);
+            char choice = s.charAt(0);
+
+            if (choice < min || choice > max) {
+                System.out.print(
+                        red + "Please enter a valid option letter between [" + min + "] and [" + max + "]: " + reset);
                 continue;
             }
-
-            return val;
+            return choice;
         }
     }
+
+    /*
+     * private static int readInt(Scanner scan, int min, int max) {
+     * while (true) {
+     * String s = scan.nextLine().trim();
+     * 
+     * if (s.isEmpty()) {
+     * System.out.print(red +
+     * "Input cannot be empty. Please enter a number between " + min + " and " + max
+     * + ": " + reset);
+     * continue;
+     * }
+     * if (!s.matches("\\d+")) {
+     * System.out.print(red + "Please enter a number between " + min + " and " + max
+     * + ": " + reset);
+     * continue;
+     * }
+     * 
+     * int val;
+     * try {
+     * val = Integer.parseInt(s);
+     * } catch (NumberFormatException e) {
+     * System.out.print(red + "Please enter a number between " + min + " and " + max
+     * + ": " + reset);
+     * continue;
+     * }
+     * 
+     * if (val < min || val > max) {
+     * System.out.print(red + "Please enter a number between " + min + " and " + max
+     * + ": " + reset);
+     * continue;
+     * }
+     * 
+     * return val;
+     * }
+     * }
+     */
 
     /* Optional helpers for menu I/O (no implementation yet) */
     private static void clearScreen() {
@@ -116,24 +161,24 @@ public class Main {
      */
     private static void subMenuOption1() {
         System.out.println("");
-         while (true) {
-            System.out.println(red+"********************************"+reset);
-            System.out.println(cyan+"[1] Calculate Age and Zodiac Sign"+reset);
-            System.out.println(cyan+"[2] Reverse the Words"+reset);
-            System.out.println(cyan+"[3] Terminate"+reset);
-            System.out.println(red+"********************************"+reset);
-            System.out.println(green+"Please select an option to continue: "+reset);
-            int choice = readInt(SC, 1, 3);
+        while (true) {
+            System.out.println(red + "********************************" + reset);
+            System.out.println(cyan + "[A] Calculate Age and Zodiac Sign" + reset);
+            System.out.println(cyan + "[B] Reverse the Words" + reset);
+            System.out.println(cyan + "[C] Return To Main Menu" + reset);
+            System.out.println(red + "********************************" + reset);
+            System.out.println(green + "Please select an option to continue: " + reset);
+            int choice = readMenuOption(SC, 'A', 'C');
 
             switch (choice) {
-                case 1:
+                case 'A':
                     ageAndZodiacSignDetection();
                     break;
-                case 2:
+                case 'B':
                     reverseTheWords();
                     break;
-                case 3:
-                    System.out.println(green + "\nReturning the main menu."+reset);
+                case 'C':
+                    System.out.println(green + "\nReturning the main menu." + reset);
                     return;
             }
             clearScreen();
@@ -163,7 +208,7 @@ public class Main {
         int tempYear = currentYear;
 
         while (days < 0) {
-            
+
             int prevMonth = tempMonth - 1;
             int prevYear = tempYear;
             if (prevMonth == 0) {
@@ -172,15 +217,13 @@ public class Main {
             }
             int dim = getDaysInMonth(prevMonth, prevYear);
 
-            days += dim; 
-            months -= 1; 
+            days += dim;
+            months -= 1;
 
-            
             tempMonth = prevMonth;
             tempYear = prevYear;
         }
 
-        
         if (months < 0) {
             years -= 1;
             months += 12;
@@ -188,8 +231,7 @@ public class Main {
 
         System.out.println(cyan + "Your age: " + years + " years, " + months + " months, " + days + " days" + reset);
         System.out.println(red + "Your zodiac sign is " + getZodiacString(birthDay, birthMonth) + "." + reset);
-        if(birthYear<=1500)
-        {
+        if (birthYear <= 1500) {
             System.out.println(red + " Wow... You must be a time traveler! " + reset);
             System.out.println(yellow + "Are you sure you were born in " + birthYear + "?" + reset);
         }
@@ -245,60 +287,67 @@ public class Main {
         return false;
     }
 
-    private static int getDay(Scanner scan) {
-        while (true) {
-            int currentMonth = getCurrentMonth();
-            int currentYear = getCurrentYear();
-
-            String s = scan.nextLine().trim();
-            if (s.length() > 1 && s.charAt(0) == '0') {
-                System.out.println(red + "Leading zeros are not allowed for day." + reset);
-                System.out.print(red + "Please enter your day of birth: " + reset);
-                continue;
-            }
-            if (!s.matches("\\d+")) {
-                System.out.println(red + "Your day of birth must contain digits only." + reset);
-                System.out.print(red + "Please enter your day of birth: " + reset);
-                continue;
-            }
-
-            int val;
-            try {
-                val = Integer.parseInt(s);
-            } catch (NumberFormatException e) {
-                System.out.println(red + "Invalid day value (number too large)." + reset);
-                System.out.print(red + "Please enter your day of birth: " + reset);
-                continue;
-            }
-            if (currentMonth == 2) {
-                int max = 0;
-                if (IsLeapYear(currentYear))
-                    max = 29;
-                else
-                    max = 28;
-
-                if (val <= 0 || val > max) {
-                    System.out.println(red + "Your day of birth must be between 1 - " + max + "." + reset);
-                    System.out.print(red + "Please enter your day of birth: " + reset);
-                    continue;
-                }
-            } else if (currentMonth == 4 || currentMonth == 6 || currentMonth == 9 || currentMonth == 11) {
-                if (val <= 0 || val > 30) {
-                    System.out.println(red + "Your day of birth must be between 1 - 30." + reset);
-                    System.out.print(red + "Please enter your day of birth: " + reset);
-                    continue;
-                }
-            } else {
-                if (val <= 0 || val > 31) {
-                    System.out.println(red + "Your day of birth must be between 1 - 31." + reset);
-                    System.out.print(red + "Please enter your day of birth: " + reset);
-                    continue;
-                }
-            }
-            return val;
-        }
-
-    }
+    /*
+     * private static int getDay(Scanner scan) {
+     * while (true) {
+     * int currentMonth = getCurrentMonth();
+     * int currentYear = getCurrentYear();
+     * 
+     * String s = scan.nextLine().trim();
+     * if (s.length() > 1 && s.charAt(0) == '0') {
+     * System.out.println(red + "Leading zeros are not allowed for day." + reset);
+     * System.out.print(red + "Please enter your day of birth: " + reset);
+     * continue;
+     * }
+     * if (!s.matches("\\d+")) {
+     * System.out.println(red + "Your day of birth must contain digits only." +
+     * reset);
+     * System.out.print(red + "Please enter your day of birth: " + reset);
+     * continue;
+     * }
+     * 
+     * int val;
+     * try {
+     * val = Integer.parseInt(s);
+     * } catch (NumberFormatException e) {
+     * System.out.println(red + "Invalid day value (number too large)." + reset);
+     * System.out.print(red + "Please enter your day of birth: " + reset);
+     * continue;
+     * }
+     * if (currentMonth == 2) {
+     * int max = 0;
+     * if (IsLeapYear(currentYear))
+     * max = 29;
+     * else
+     * max = 28;
+     * 
+     * if (val <= 0 || val > max) {
+     * System.out.println(red + "Your day of birth must be between 1 - " + max + "."
+     * + reset);
+     * System.out.print(red + "Please enter your day of birth: " + reset);
+     * continue;
+     * }
+     * } else if (currentMonth == 4 || currentMonth == 6 || currentMonth == 9 ||
+     * currentMonth == 11) {
+     * if (val <= 0 || val > 30) {
+     * System.out.println(red + "Your day of birth must be between 1 - 30." +
+     * reset);
+     * System.out.print(red + "Please enter your day of birth: " + reset);
+     * continue;
+     * }
+     * } else {
+     * if (val <= 0 || val > 31) {
+     * System.out.println(red + "Your day of birth must be between 1 - 31." +
+     * reset);
+     * System.out.print(red + "Please enter your day of birth: " + reset);
+     * continue;
+     * }
+     * }
+     * return val;
+     * }
+     * 
+     * }
+     */
 
     // Day validator using provided birth month/year (prevents dates like 31/04)
     private static int getDay(Scanner scan, int month, int year) {
@@ -326,7 +375,11 @@ public class Main {
 
             int max;
             if (month == 2) {
-                max = IsLeapYear(year) ? 29 : 28;
+                if (IsLeapYear(year)) {
+                    max = 29;
+                } else {
+                    max = 28;
+                }
             } else if (month == 4 || month == 6 || month == 9 || month == 11) {
                 max = 30;
             } else {
@@ -411,7 +464,8 @@ public class Main {
             }
 
             if (val > currentYear) {
-                System.out.println(red + "Your year of birth cannot be in the future (<= " + currentYear + ")." + reset);
+                System.out
+                        .println(red + "Your year of birth cannot be in the future (<= " + currentYear + ")." + reset);
                 System.out.print(red + "Please enter your year of birth: " + reset);
                 continue;
             }
@@ -419,7 +473,6 @@ public class Main {
             return val;
         }
     }
-
 
     private static int getCurrentDay() {
         return LocalDate.now().getDayOfMonth();
@@ -433,17 +486,33 @@ public class Main {
         return LocalDate.now().getYear();
     }
 
-
     /* Option A — Task 2: Reverse the Words (recursive) */
 
     // Main function of Option A Task 2. Print reversed word.
     private static void reverseTheWords() {
-        // TODO: Orchestrate input, recursion, and output
+        String input = getTextInput(SC);
+        // String output = createReverseOutput(input);
+
+        System.out.println(yellow + "\nOriginal Text:\n" + reset + input);
+        // System.out.println(cyan + "Reversed Words Text:\n" + reset + output);
+
+        System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
+        SC.nextLine();
     }
 
     // Get text input from user with using java.util.Scanner and return it.
-    private static String getTextInput() {
-        return "";
+    private static String getTextInput(Scanner scan) {
+        String s;
+        System.out.print(yellow + "Enter your text to be reversed: " + reset);
+        while (true) {
+            s = scan.nextLine();
+            if (s.isEmpty()) {
+                System.out.print(red + "Input cannot be empty. Please enter your text: " + reset);
+                continue;
+            }
+            return s;
+        }
+
     }
 
     // After getting input from user, create reverse form and return it.
@@ -603,31 +672,314 @@ public class Main {
 
     // (Stubs only; implement later)
     private static void subMenuOption4() {
-        // TODO: Board size (5x4, 6x5, 7x6) and mode (1P vs CPU / 2P)
+        while (true) {
+            System.out.println(red + "********************************" + reset);
+            System.out.println(cyan + "[A] 5 x 4 Map " + reset);
+            System.out.println(cyan + "[B] 6 x 5 Map " + reset);
+            System.out.println(cyan + "[C] 7 x 6 Map " + reset);
+            System.out.println(cyan + "[D] Return to the Main Menu " + reset);
+            System.out.println(red + "********************************" + reset);
+            System.out.println(green + "Please select an option to continue: " + reset);
+            int choice = readMenuOption(SC, 'A', 'D');
+
+            switch (choice) {
+                case 'A':
+                    ROWS = 5;
+                    COLS = 4;
+                    break;
+                case 'B':
+                    ROWS = 6;
+                    COLS = 5;
+                    break;
+                case 'C':
+                    ROWS = 7;
+                    COLS = 6;
+                    break;
+                case 'D':
+                    System.out.println(green + "\nReturning the main menu." + reset);
+                    return;
+            }
+            clearScreen();
+            break;
+        }
+
+        while (true) {
+            System.out.println(red + "********************************" + reset);
+            System.out.println(cyan + "[A] 1 Player " + reset);
+            System.out.println(cyan + "[B] 2 Player " + reset);
+            System.out.println(cyan + "[C] Return to the Main Menu " + reset);
+            System.out.println(red + "********************************" + reset);
+            System.out.println(green + "Please select an option to continue: " + reset);
+            char choice = readMenuOption(SC, 'A', 'C');
+
+            if (choice == 'C' || choice == 'c') {
+                clearScreen();
+                subMenuOption4();
+                return;
+            }
+
+            if (choice == 'A' || choice == 'a') {
+                singlePlayer = true;
+            } else {
+                singlePlayer = false;
+            }
+
+            startConnectFour();
+            clearScreen();
+            continue; 
+        }
+
     }
 
     private static void startConnectFour() {
-        // TODO: Main game loop, render board each move
+        board = new char[ROWS][COLS];
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLS; c++) {
+                board[r][c] = '.';
+            }
+        }
+
+        currentPlayer = 'X';
+
+        while (true) {
+            clearScreen();
+            renderBoard();
+
+            if (singlePlayer) {
+                if (currentPlayer == 'X') {
+                    makeMovePlayer();
+                } else {
+                    makeMoveCPU();
+                }
+            } else {
+                makeMovePlayer();
+            }
+
+            if (checkWin()) {
+                clearScreen();
+                renderBoard();
+                System.out.println(green + "Player " + currentPlayer + " wins!" + reset);
+                System.out.println(yellow + "Press ENTER to continue..." + reset);
+                SC.nextLine();
+                break;
+            }
+
+            if (checkDraw()) {
+                clearScreen();
+                renderBoard();
+                System.out.println(yellow + "It's a draw." + reset);
+                System.out.println(yellow + "Press ENTER to continue..." + reset);
+                SC.nextLine();
+                break;
+            }
+
+            switchPlayer();
+
+        }
+    }
+
+    private static void switchPlayer() {
+        if (currentPlayer == 'X') {
+            currentPlayer = 'O';
+        } else {
+            currentPlayer = 'X';
+        }
     }
 
     private static void renderBoard() {
-        // TODO: Print the board to console
+        System.out.print(cyan);
+        System.out.print("  ");
+        for (int c = 1; c <= COLS; c++) {
+            System.out.print(c);
+            if (c < COLS) System.out.print("   ");
+        }
+        System.out.println(reset);
+
+        System.out.print(yellow + "+");
+        for (int i = 0; i < COLS; i++) System.out.print("---+");
+        System.out.println(reset);
+
+        // Draw rows
+        for (int r = 0; r < ROWS; r++) {
+            System.out.print(yellow + "|" + reset);
+            for (int c = 0; c < COLS; c++) {
+                char ch = board[r][c];
+                if (ch == 'X') System.out.print(red + " X " + reset);
+                else if (ch == 'O') System.out.print(green + " O " + reset);
+                else System.out.print("   ");
+                System.out.print(yellow + "|" + reset);
+            }
+            System.out.println();
+
+            System.out.print(yellow + "+");
+            for (int i = 0; i < COLS; i++) System.out.print("---+");
+            System.out.println(reset);
+        }
     }
 
     private static void makeMovePlayer() {
-        // TODO: Player move with column validation
+        while (true) {
+            System.out.print(yellow + "Player " + currentPlayer + ", choose a column (1-" + COLS + "): " + reset);
+            String choice = SC.nextLine().trim();
+
+            int col;
+            try {
+                col = Integer.parseInt(choice);
+            } catch (NumberFormatException e) {
+                System.out.println(red + "Invalid input. Please enter a number." + reset);
+                continue;
+            }
+
+            if (col < 1 || col > COLS) {
+                System.out.println(red + "Column out of range. Enter 1-" + COLS + "." + reset);
+                continue;
+            }
+
+            int c = col - 1;
+            if (board[0][c] != '.') {
+                System.out.println(red + "That column is full. Choose another." + reset);
+                continue;
+            }
+
+            for (int r = ROWS - 1; r >= 0; r--) {
+                if (board[r][c] == '.') {
+                    board[r][c] = currentPlayer;
+                    return;
+                }
+            }
+        }
     }
 
-    private static void makeMoveCPU() {
-        // TODO: Random/AI move (Minimax/Alpha-Beta optional)
+private static void makeMoveCPU() {
+        try { Thread.sleep(600); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+
+        final char aiPlayer = currentPlayer;
+        final char opponentPlayer;
+        if (aiPlayer == 'X') {
+            opponentPlayer = 'O';
+        } else {
+            opponentPlayer = 'X';
+        }
+
+        
+        for (int col = 0; col < COLS; col++) {
+            int row = dropRow(col);
+            if (row == -1) continue;
+            board[row][col] = aiPlayer;
+            boolean win = winningAt(row, col, aiPlayer);
+            board[row][col] = '.';
+            if (win) {
+                board[row][col] = aiPlayer;
+                return;
+            }
+        }
+
+        
+        for (int col = 0; col < COLS; col++) {
+            int row = dropRow(col);
+            if (row == -1) continue;
+            board[row][col] = opponentPlayer;
+            boolean oppWin = winningAt(row, col, opponentPlayer);
+            board[row][col] = '.';
+            if (oppWin) {
+                board[row][col] = aiPlayer;
+                return;
+            }
+        }
+
+        
+        int[] pref = new int[COLS];
+        int center = COLS / 2;
+        int pidx = 0;
+        for (int d = 0; pidx < COLS; d++) {
+            int col;
+            if (d % 2 == 0) {
+                col = center + d / 2;
+            } else {
+                col = center - (d + 1) / 2;
+            }
+            if (col >= 0 && col < COLS) pref[pidx++] = col;
+        }
+        int[] candidates = new int[COLS];
+        int n = 0;
+        for (int c : pref) if (dropRow(c) != -1) candidates[n++] = c;
+        if (n == 0) return; // no move
+        int chosen = candidates[RNG.nextInt(n)];
+        for (int r = ROWS - 1; r >= 0; r--) {
+            if (board[r][chosen] == '.') { board[r][chosen] = aiPlayer; break; }
+        }
+    }
+
+    
+    private static int dropRow(int column) {
+        if (column < 0 || column >= COLS) return -1;
+        for (int row = ROWS - 1; row >= 0; row--) if (board[row][column] == '.') return row;
+        return -1;
+    }
+
+    private static boolean inBounds(int row, int column) {
+        return row >= 0 && row < ROWS && column >= 0 && column < COLS;
+    }
+
+    private static boolean winningAt(int row, int column, char player) {
+        if (row < 0 || column < 0) return false;
+        int[][] directions = { {0,1},{1,0},{1,1},{1,-1} };
+        for (int[] direction : directions) {
+            int count = 1, dr = direction[0], dc = direction[1];
+            for (int k = 1; k < 4; k++) {
+                int rr = row + dr*k, cc = column + dc*k;
+                if (inBounds(rr,cc) && board[rr][cc] == player) count++; else break;
+            }
+            for (int k = 1; k < 4; k++) {
+                int rr = row - dr*k, cc = column - dc*k;
+                if (inBounds(rr,cc) && board[rr][cc] == player) count++; else break;
+            }
+            if (count >= 4) return true;
+        }
+        return false;
+    }
+    private static boolean isFull() {
+        for (int col = 0; col < COLS; col++) if (board[0][col] == '.') return false;
+        return true;
     }
 
     private static boolean checkWin() {
+        char p = currentPlayer;
+        if (p != 'X' && p != 'O') return false;
+
+        // Horizontal
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c <= COLS - 4; c++) {
+                if (board[r][c] == p && board[r][c+1] == p && board[r][c+2] == p && board[r][c+3] == p) return true;
+            }
+        }
+
+        // Vertical
+        for (int c = 0; c < COLS; c++) {
+            for (int r = 0; r <= ROWS - 4; r++) {
+                if (board[r][c] == p && board[r+1][c] == p && board[r+2][c] == p && board[r+3][c] == p) return true;
+            }
+        }
+
+        // Diagonal down-right
+        for (int r = 0; r <= ROWS - 4; r++) {
+            for (int c = 0; c <= COLS - 4; c++) {
+                if (board[r][c] == p && board[r+1][c+1] == p && board[r+2][c+2] == p && board[r+3][c+3] == p) return true;
+            }
+        }
+
+        // Diagonal up-right
+        for (int r = 3; r < ROWS; r++) {
+            for (int c = 0; c <= COLS - 4; c++) {
+                if (board[r][c] == p && board[r-1][c+1] == p && board[r-2][c+2] == p && board[r-3][c+3] == p) return true;
+            }
+        }
+
         return false;
     }
 
     private static boolean checkDraw() {
-        return false;
+        return isFull();
     }
 
     /*
