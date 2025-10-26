@@ -2,6 +2,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
 
@@ -352,18 +354,29 @@ public class Main {
         SC.nextLine();
     }
 
-    private static String getTextInput(Scanner scan) {
-        String s;
-        System.out.print(yellow + "Enter your text to be reversed: " + reset);
-        while (true){
-            s = scan.nextLine();
-            if (s.isEmpty()) {
-                System.out.print(red + "Input cannot be empty. Please enter your text: " + reset);
-                continue;
-            }
-            return s;
-        }
+    private static int arraySize() {
+        return 0;
     }
+
+    private static ArrayList<Integer> getElement() {
+        return new ArrayList<>();
+    }
+
+    private static double calculateMedian() {
+        return 0.0;
+    }
+
+    private static double calculateArithmeticMedian() {
+        return 0.0;
+    }
+
+    private static double calculateGeometricMedian() {
+        return 0.0;
+    }
+
+    private static double calculateHarmonicMedian() {
+        return 0.0;
+    } // !!! Should be computed recursively
 
     // Kelime sırasını koruyup her kelimeyi özyinelemeyle ters çevir
     private static String createReverseOutput(String s) {
@@ -390,85 +403,37 @@ public class Main {
         return s != null && s.trim().length() >= 2;
     }
 
-    // Tek kelimeyi recursive ters çevir
-    private static String reverseWordRec(String s) {
-        if (s == null || s.length() <= 1) return s;
-        return s.charAt(s.length() - 1) + reverseWordRec(s.substring(0, s.length() - 1));
+    // Get dimension from user with using java.util.Scanner.
+    private static int getDimension() {
+        return 0;
+    }
+
+    // Check entered dimension is valid or not.
+    private static boolean isValidDimension() {
+        return false;
+    }
+
+    private static int calculateManhattanDistance() {
+        return 0;
+    }
+
+    private static int calculateEuclideanDistance() {
+        return 0;
+    }
+
+    private static int calculateCosineSimilarity() {
+        return 0;
     }
 
     /*
      * =============================
-     * Option B — Secondary School
+     * Option D — University (Connect Four)
      * =============================
      */
-    private static void subMenuOption2() {
-        while (true) {
-            System.out.println(red+"********************************"+reset);
-            System.out.println(cyan+"[A] Prime Numbers (comparison)"+reset);
-            System.out.println(cyan+"[B] Step-by-step Evaluation of Expression"+reset);
-            System.out.println(cyan+"[C] Return To Main Menu"+reset);
-            System.out.println(red+"********************************"+reset);
-            System.out.print(green+"Please select an option to continue: "+reset);
-            char choice = readMenuOption(SC, 'A', 'C');
 
-            switch (choice) {
-                case 'A' -> primeNumbers();
-                case 'B' -> {
-                    System.out.println(yellow + "\nEnter an expression with digits and + - x × : ( )" + reset);
-                    Expr.run(SC);
-                    System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
-                    SC.nextLine();
-                }
-                case 'C' -> {
-                    System.out.println(green + "\nReturning the main menu."+reset);
-                    return;
-                }
-            }
-            clearScreen();
-        }
-    }
-
-    /* Option B — Task 1: Prime Numbers (Eratosthenes / Sundaram / Atkin) */
-    static class R { List<Integer> list; long nanos; R(List<Integer> l,long n){list=l;nanos=n;} }
-
-    private static void primeNumbers() {
-        System.out.print(green + "Enter n (n >= 12): " + reset);
-        int n;
-        while (true) {
-            String s = SC.nextLine().trim();
-            try {
-                n = Integer.parseInt(s);
-                if (n < 12) throw new NumberFormatException();
-                break;
-            } catch (NumberFormatException e) {
-                System.out.print(red + "Invalid integer (>=12). Try again: " + reset);
-            }
-        }
-
-        R er = measure(() -> Primes.sieveEratosthenes(n));
-        R su = measure(() -> Primes.sieveSundaram(n));
-        R at = measure(() -> Primes.sieveAtkin(n));
-
-        System.out.println();
-        printPrimeSummary("Eratosthenes", er);
-        printPrimeSummary("Sundaram   ", su);
-        printPrimeSummary("Atkin      ", at);
-
-        if (!er.list.equals(su.list) || !er.list.equals(at.list)) {
-            System.out.println("\n" + red + "WARNING: Methods produced different results!" + reset);
-            System.out.println("Differences relative to Eratosthenes:");
-            printDiff("Sundaram", er.list, su.list);
-            printDiff("Atkin   ", er.list, at.list);
-        }
-
-        System.out.println(yellow + "\nPress ENTER to return to menu..." + reset);
-        SC.nextLine();
-    }
-
-    private static R measure(Supplier<List<Integer>> job) {
-        long t0 = System.nanoTime();
-        List<Integer> out = job.get();
-        return new R(out, System.nanoTime() - t0);
+    // (Stubs only; implement later)
+    private static void subMenuOption4() {
+        // TODO: Board size (5x4, 6x5, 7x6) and mode (1P vs CPU / 2P)
     }
 
     private static void printPrimeSummary(String name, R r) {
@@ -702,27 +667,19 @@ public class Main {
         }
     }
 
-    /*
-     * =============================
-     * Option C — High School (stubs)
-     * =============================
-     */
-    private static void subMenuOption3() {
-        System.out.println(yellow + "Option C is under construction." + reset);
-        System.out.println(yellow + "Press ENTER to return to main menu..." + reset);
-        SC.nextLine();
+    private static boolean checkWin() {
+        return false;
+    }
+
+    private static boolean checkDraw() {
+        return false;
     }
 
     /*
      * =============================
-     * Option D — University (stubs)
+     * Program Entry Point
      * =============================
      */
-    private static void subMenuOption4() {
-        System.out.println(yellow + "Option D (Connect Four) is under construction." + reset);
-        System.out.println(yellow + "Press ENTER to return to main menu..." + reset);
-        SC.nextLine();
-    }
 
     /*
      * =============================
