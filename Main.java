@@ -22,7 +22,13 @@ public class Main {
     private static String green = "\u001B[32m";
     private static String reset = "\u001B[0m"; // Resets text color to default
     private static String red = "\u001B[31m";
-    
+    //For Connect4 game
+    private static int ROWS, COLS;
+    private static char[][] board;
+    private static char currentPlayer; // 'X' or 'O'
+    private static boolean singlePlayer; // true => 1P vs CPU
+    private static final java.util.Random RNG = new java.util.Random();
+
     // Shared data structure for Option C - Task 1 (Statistical Information)
     private static ArrayList<Double> arrC = new ArrayList<>();
 
@@ -1237,15 +1243,315 @@ public class Main {
      
     // Placeholder for Option D functionality
     private static void subMenuOption4() {
-         System.out.println(yellow + "--- Connect Four ---" + reset);
-         System.out.println(red + "This feature (Option D) is not implemented yet." + reset);
-         System.out.println(yellow + "Press ENTER to return to main menu..." + reset);
-         SC.nextLine(); // Wait for user
+        while (true) {
+            System.out.println(red + "********************************" + reset);
+            System.out.println(cyan + "[A] 5 x 4 Map " + reset);
+            System.out.println(cyan + "[B] 6 x 5 Map " + reset);
+            System.out.println(cyan + "[C] 7 x 6 Map " + reset);
+            System.out.println(cyan + "[D] Return to the Main Menu " + reset);
+            System.out.println(red + "********************************" + reset);
+            System.out.println(green + "Please select an option to continue: " + reset);
+            int choice = readMenuOption(SC, 'A', 'D');
+
+            switch (choice) {
+                case 'A':
+                    ROWS = 5;
+                    COLS = 4;
+                    break;
+                case 'B':
+                    ROWS = 6;
+                    COLS = 5;
+                    break;
+                case 'C':
+                    ROWS = 7;
+                    COLS = 6;
+                    break;
+                case 'D':
+                    System.out.println(green + "\nReturning the main menu." + reset);
+                    return;
+            }
+            clearScreen();
+            break;
+        }
+
+        while (true) {
+            System.out.println(red + "********************************" + reset);
+            System.out.println(cyan + "[A] 1 Player " + reset);
+            System.out.println(cyan + "[B] 2 Player " + reset);
+            System.out.println(cyan + "[C] Return to the Main Menu " + reset);
+            System.out.println(red + "********************************" + reset);
+            System.out.println(green + "Please select an option to continue: " + reset);
+            char choice = readMenuOption(SC, 'A', 'C');
+
+            if (choice == 'C' || choice == 'c') {
+                clearScreen();
+                subMenuOption4();
+                return;
+            }
+
+            if (choice == 'A' || choice == 'a') {
+                singlePlayer = true;
+            } else {
+                singlePlayer = false;
+            }
+
+            startConnectFour();
+            clearScreen();
+            continue; 
+        }
+
     }
 
-    // Stubs related to Connect Four (as per original code structure)
-    private static boolean checkWin() { return false; } 
-    private static boolean checkDraw() { return false; } 
+    private static void startConnectFour() {
+        board = new char[ROWS][COLS];
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLS; c++) {
+                board[r][c] = '.';
+            }
+        }
+
+        currentPlayer = 'X';
+
+        while (true) {
+            clearScreen();
+            renderBoard();
+
+            if (singlePlayer) {
+                if (currentPlayer == 'X') {
+                    makeMovePlayer();
+                } else {
+                    makeMoveCPU();
+                }
+            } else {
+                makeMovePlayer();
+            }
+
+            if (checkWin()) {
+                clearScreen();
+                renderBoard();
+                System.out.println(green + "Player " + currentPlayer + " wins!" + reset);
+                System.out.println(yellow + "Press ENTER to continue..." + reset);
+                SC.nextLine();
+                break;
+            }
+
+            if (checkDraw()) {
+                clearScreen();
+                renderBoard();
+                System.out.println(yellow + "It's a draw." + reset);
+                System.out.println(yellow + "Press ENTER to continue..." + reset);
+                SC.nextLine();
+                break;
+            }
+
+            switchPlayer();
+
+        }
+    }
+
+    private static void switchPlayer() {
+        if (currentPlayer == 'X') {
+            currentPlayer = 'O';
+        } else {
+            currentPlayer = 'X';
+        }
+    }
+
+    private static void renderBoard() {
+        System.out.print(cyan);
+        System.out.print("  ");
+        for (int c = 1; c <= COLS; c++) {
+            System.out.print(c);
+            if (c < COLS) System.out.print("   ");
+        }
+        System.out.println(reset);
+
+        System.out.print(yellow + "+");
+        for (int i = 0; i < COLS; i++) System.out.print("---+");
+        System.out.println(reset);
+
+        // Draw rows
+        for (int r = 0; r < ROWS; r++) {
+            System.out.print(yellow + "|" + reset);
+            for (int c = 0; c < COLS; c++) {
+                char ch = board[r][c];
+                if (ch == 'X') System.out.print(red + " X " + reset);
+                else if (ch == 'O') System.out.print(green + " O " + reset);
+                else System.out.print("   ");
+                System.out.print(yellow + "|" + reset);
+            }
+            System.out.println();
+
+            System.out.print(yellow + "+");
+            for (int i = 0; i < COLS; i++) System.out.print("---+");
+            System.out.println(reset);
+        }
+    }
+
+    private static void makeMovePlayer() {
+        while (true) {
+            System.out.print(yellow + "Player " + currentPlayer + ", choose a column (1-" + COLS + "): " + reset);
+            String choice = SC.nextLine().trim();
+
+            int col;
+            try {
+                col = Integer.parseInt(choice);
+            } catch (NumberFormatException e) {
+                System.out.println(red + "Invalid input. Please enter a number." + reset);
+                continue;
+            }
+
+            if (col < 1 || col > COLS) {
+                System.out.println(red + "Column out of range. Enter 1-" + COLS + "." + reset);
+                continue;
+            }
+
+            int c = col - 1;
+            if (board[0][c] != '.') {
+                System.out.println(red + "That column is full. Choose another." + reset);
+                continue;
+            }
+
+            for (int r = ROWS - 1; r >= 0; r--) {
+                if (board[r][c] == '.') {
+                    board[r][c] = currentPlayer;
+                    return;
+                }
+            }
+        }
+    }
+
+private static void makeMoveCPU() {
+        try { Thread.sleep(600); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+
+        final char aiPlayer = currentPlayer;
+        final char opponentPlayer;
+        if (aiPlayer == 'X') {
+            opponentPlayer = 'O';
+        } else {
+            opponentPlayer = 'X';
+        }
+
+        
+        for (int col = 0; col < COLS; col++) {
+            int row = dropRow(col);
+            if (row == -1) continue;
+            board[row][col] = aiPlayer;
+            boolean win = winningAt(row, col, aiPlayer);
+            board[row][col] = '.';
+            if (win) {
+                board[row][col] = aiPlayer;
+                return;
+            }
+        }
+
+        
+        for (int col = 0; col < COLS; col++) {
+            int row = dropRow(col);
+            if (row == -1) continue;
+            board[row][col] = opponentPlayer;
+            boolean oppWin = winningAt(row, col, opponentPlayer);
+            board[row][col] = '.';
+            if (oppWin) {
+                board[row][col] = aiPlayer;
+                return;
+            }
+        }
+
+        
+        int[] pref = new int[COLS];
+        int center = COLS / 2;
+        int pidx = 0;
+        for (int d = 0; pidx < COLS; d++) {
+            int col;
+            if (d % 2 == 0) {
+                col = center + d / 2;
+            } else {
+                col = center - (d + 1) / 2;
+            }
+            if (col >= 0 && col < COLS) pref[pidx++] = col;
+        }
+        int[] candidates = new int[COLS];
+        int n = 0;
+        for (int c : pref) if (dropRow(c) != -1) candidates[n++] = c;
+        if (n == 0) return; // no move
+        int chosen = candidates[RNG.nextInt(n)];
+        for (int r = ROWS - 1; r >= 0; r--) {
+            if (board[r][chosen] == '.') { board[r][chosen] = aiPlayer; break; }
+        }
+    }
+
+    
+    private static int dropRow(int column) {
+        if (column < 0 || column >= COLS) return -1;
+        for (int row = ROWS - 1; row >= 0; row--) if (board[row][column] == '.') return row;
+        return -1;
+    }
+
+    private static boolean inBounds(int row, int column) {
+        return row >= 0 && row < ROWS && column >= 0 && column < COLS;
+    }
+
+    private static boolean winningAt(int row, int column, char player) {
+        if (row < 0 || column < 0) return false;
+        int[][] directions = { {0,1},{1,0},{1,1},{1,-1} };
+        for (int[] direction : directions) {
+            int count = 1, dr = direction[0], dc = direction[1];
+            for (int k = 1; k < 4; k++) {
+                int rr = row + dr*k, cc = column + dc*k;
+                if (inBounds(rr,cc) && board[rr][cc] == player) count++; else break;
+            }
+            for (int k = 1; k < 4; k++) {
+                int rr = row - dr*k, cc = column - dc*k;
+                if (inBounds(rr,cc) && board[rr][cc] == player) count++; else break;
+            }
+            if (count >= 4) return true;
+        }
+        return false;
+    }
+    private static boolean isFull() {
+        for (int col = 0; col < COLS; col++) if (board[0][col] == '.') return false;
+        return true;
+    }
+
+    private static boolean checkWin() {
+        char p = currentPlayer;
+        if (p != 'X' && p != 'O') return false;
+
+        // Horizontal
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c <= COLS - 4; c++) {
+                if (board[r][c] == p && board[r][c+1] == p && board[r][c+2] == p && board[r][c+3] == p) return true;
+            }
+        }
+
+        // Vertical
+        for (int c = 0; c < COLS; c++) {
+            for (int r = 0; r <= ROWS - 4; r++) {
+                if (board[r][c] == p && board[r+1][c] == p && board[r+2][c] == p && board[r+3][c] == p) return true;
+            }
+        }
+
+        // Diagonal down-right
+        for (int r = 0; r <= ROWS - 4; r++) {
+            for (int c = 0; c <= COLS - 4; c++) {
+                if (board[r][c] == p && board[r+1][c+1] == p && board[r+2][c+2] == p && board[r+3][c+3] == p) return true;
+            }
+        }
+
+        // Diagonal up-right
+        for (int r = 3; r < ROWS; r++) {
+            for (int c = 0; c <= COLS - 4; c++) {
+                if (board[r][c] == p && board[r-1][c+1] == p && board[r-2][c+2] == p && board[r-3][c+3] == p) return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean checkDraw() {
+        return isFull();
+    }
 
     /*
      * =============================
