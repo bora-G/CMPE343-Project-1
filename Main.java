@@ -974,260 +974,242 @@ public class Main {
         }
     }
     
-    /* Option C - Task 1: Statistical Information */
-    private static void statisticalInformation() {
-        // Loop allows user to repeat or return
-        while(true) {
-            arrC.clear(); // Clear the shared ArrayList for new input
-            System.out.println(yellow + "=== Statistical Information about an Array ===" + reset);
-            int n = arraySize(); // Get desired array size (>= 1)
+/*
+ * =============================
+ * Option C — High School
+ * =============================
+ */
 
-            System.out.println(cyan + "Enter " + n + " real numbers (use '.' for decimals, separated by space/newline):" + reset);
+/** Displays the High School menu and runs the chosen task. */
+private static void subMenuOption3() {
+    while (true) {
+        clearScreen();
+        System.out.println(red+"********************************"+reset);
+        System.out.println(cyan+"[A] Statistical Information about an Array"+reset);
+        System.out.println(cyan+"[B] Distance between Two Arrays"+reset);
+        System.out.println(cyan+"[C] Return To Main Menu"+reset);
+        System.out.println(red+"********************************"+reset);
+        System.out.print(green+"Please select an option to continue: "+reset);
+        char choice = readMenuOption(SC, 'A', 'C');
 
-            // Read exactly n valid double values into arrC
-            while (arrC.size() < n) {
-                String line = SC.nextLine().trim(); // Read a line
-                if (line.isEmpty()) continue; // Ignore empty lines
-                
-                String[] tokens = line.split("\\s+"); // Split line into tokens by whitespace
-                int tokensProcessedThisLine = 0;
-                
-                // Process tokens from the current line
-                for (String token : tokens) {
-                    if (arrC.size() >= n) break; // Stop if array is full
-                    try { 
-                        double value = Double.parseDouble(token); // Parse token to double
-                        arrC.add(value); // Add valid double to the list
-                        tokensProcessedThisLine++;
-                    } catch (NumberFormatException ex) { 
-                        // Handle invalid number format
-                        System.out.println(red + "Invalid number format: '" + token + "'. Please continue entering." + reset); 
-                    }
-                }
-                
-                // Warn if extra tokens were ignored on this line after reaching size n
-                if (arrC.size() >= n && tokensProcessedThisLine < tokens.length) {
-                    String[] extras = Arrays.copyOfRange(tokens, tokensProcessedThisLine, tokens.length);
-                    System.out.println(red + "Warning: " + extras.length + " extra value(s) ignored: " + String.join(" ", extras) + reset);
-                }
+        clearScreen();
+
+        switch (choice) {
+            case 'A' -> statisticalInformation();
+            case 'B' -> distanceBetweenTwoArrays();
+            case 'C' -> {
+                System.out.println(green + "\nReturning the main menu."+reset);
+                System.out.println(yellow + "Press ENTER..." + reset);
+                SC.nextLine();
+                return;
             }
-
-            // Calculate statistical measures
-            double median = calculateMedian(); // Handles sorting and finding middle element(s)
-            double arithmetic = calculateArithmeticMean(); // Simple sum / count
-            double geometric = calculateGeometricMean(); // Uses logs for stability, checks non-positive
-            double harmonic = calculateHarmonicMean(); // Uses recursive helper, checks for zero
-
-            // Display results, formatted to 6 decimal places
-            System.out.println(green + "\nResults:" + reset);
-            System.out.printf(cyan + "Median:             " + reset + "%.6f%n", median);
-            System.out.printf(cyan + "Arithmetic mean:    " + reset + "%.6f%n", arithmetic);
-            // Handle undefined geometric mean (if non-positive numbers exist)
-            if (Double.isNaN(geometric)) System.out.println(cyan + "Geometric mean:     " + reset + red + "undefined (non-positive element)" + reset);
-            else System.out.printf(cyan + "Geometric mean:     " + reset + "%.6f%n", geometric);
-             // Handle undefined harmonic mean (if zero exists)
-            if (Double.isNaN(harmonic)) System.out.println(cyan + "Harmonic mean:      " + reset + red + "undefined (element is 0)" + reset);
-            else System.out.printf(cyan + "Harmonic mean:      " + reset + "%.6f%n", harmonic);
-
-            // Ask user to repeat or return
-            System.out.print(yellow + "\nCalculate for another array? (Y/N): " + reset);
-            char repeatChoice = readMenuOption(SC, 'N', 'Y');
-            if (repeatChoice == 'N') break; // Exit loop
-            clearScreen(); // Clear screen before repeating
         }
     }
+}
 
-    // Helper to read array size (>= 1)
-    private static int arraySize() {
-        System.out.print(yellow + "Enter array size n (must be >= 1): " + reset);
-        // Use readInt helper for range validation
-        return readInt(SC, 1, Integer.MAX_VALUE); // Ensures input is >= 1
-    }
+/** Reads an array and shows its median, arithmetic, geometric and harmonic means. */
+private static void statisticalInformation() {
+    while(true) {
+        arrC.clear();
+        System.out.println(yellow + "=== Statistical Information about an Array ===" + reset);
+        int n = arraySize();
 
-    // Calculates the median of the numbers in arrC
-    private static double calculateMedian() {
-        if (arrC.isEmpty()) return 0.0; // Return 0 for empty array
-        // Create a sorted copy to avoid modifying the original list
-        ArrayList<Double> sortedCopy = new ArrayList<>(arrC);
-        sortedCopy.sort(Double::compareTo); // Sort the copy
-        int n = sortedCopy.size();
-        if (n % 2 == 1) { // Odd number of elements
-            return sortedCopy.get(n / 2); // Middle element
-        } else { // Even number of elements
-            // Average of the two middle elements
-            return (sortedCopy.get(n / 2 - 1) + sortedCopy.get(n / 2)) / 2.0; 
-        }
-    }
+        System.out.println(cyan + "Enter " + n + " real numbers (use '.' for decimals):" + reset);
 
-    // Calculates the arithmetic mean (average) of numbers in arrC
-    private static double calculateArithmeticMean() {
-        if (arrC.isEmpty()) return 0.0;
-        double sum = 0.0; 
-        for (double v : arrC) sum += v; // Sum all elements
-        return sum / arrC.size(); // Divide sum by count
-    }
+        while (arrC.size() < n) {
+            String line = SC.nextLine().trim();
+            if (line.isEmpty()) continue;
 
-    // Calculates the geometric mean of numbers in arrC
-    // Returns NaN if any element is non-positive
-    private static double calculateGeometricMean() {
-        if (arrC.isEmpty()) return 0.0;
-        // Check for non-positive numbers, which make geometric mean undefined
-        for (double v : arrC) if (v <= 0.0) return Double.NaN; 
-        
-        // Use logarithms to avoid potential overflow/underflow with large/small products
-        double logSum = 0.0; 
-        for (double v : arrC) logSum += Math.log(v); // Sum of logarithms
-        // Geometric mean = exp( (sum of logs) / n )
-        return Math.exp(logSum / arrC.size()); 
-    }
-
-    // Calculates the harmonic mean of numbers in arrC
-    // Returns NaN if any element is zero
-    // USES RECURSION as required by the project PDF
-    private static double calculateHarmonicMean() {
-        if (arrC.isEmpty()) return 0.0;
-        // Check for zero, which makes harmonic mean undefined (division by zero)
-        for (double v : arrC) if (v == 0.0) return Double.NaN; 
-        
-        // Calculate sum of reciprocals using a recursive helper method
-        double sumOfReciprocals = harmonicRec(arrC, 0); 
-        // Harmonic mean = n / (sum of 1/x_i)
-        return arrC.size() / sumOfReciprocals; 
-    }
-
-    // Recursive helper for harmonic mean: calculates sum of reciprocals
-    private static double harmonicRec(ArrayList<Double> a, int index) {
-        // Base Case: If index reaches the end of the list, return 0
-        if (index == a.size()) return 0.0;
-        // Recursive Step: Return (1 / current element) + recursive call for the rest of the list
-        return (1.0 / a.get(index)) + harmonicRec(a, index + 1);
-    }
-
-    /* Option C - Task 2: Distances Between Two Arrays */
-    private static void distanceBetweenTwoArrays() {
-        // Loop allows user to repeat or return
-        while(true) {
-            System.out.println(yellow + "=== Distance between Two Arrays ===" + reset);
-            int d = getDimension(); // Read vector dimension (>= 1)
-
-            System.out.println(cyan + "Enter first vector A (length " + d + ", integers 0-9):" + reset);
-            int[] vectorA = readVector(d, "A"); // Read and validate first vector
-
-            System.out.println(cyan + "Enter second vector B (length " + d + ", integers 0-9):" + reset);
-            int[] vectorB = readVector(d, "B"); // Read and validate second vector
-
-            // Calculate the three distance/similarity measures
-            double manhattan = calculateManhattanDistance(vectorA, vectorB);
-            double euclidean = calculateEuclideanDistance(vectorA, vectorB);
-            // Cosine similarity can be undefined if a vector is zero
-            Double cosine = calculateCosineSimilarity(vectorA, vectorB); 
-
-            // Display results, formatted to 6 decimal places
-            System.out.println(green + "\nResults:" + reset);
-            System.out.printf(cyan + "Manhattan distance: " + reset + "%.6f%n", manhattan);
-            System.out.printf(cyan + "Euclidean distance: " + reset + "%.6f%n", euclidean);
-            // Handle undefined cosine similarity
-            if (cosine == null) System.out.println(cyan + "Cosine similarity:  " + reset + red + "undefined (one vector is zero)" + reset);
-            else System.out.printf(cyan + "Cosine similarity:  " + reset + "%.6f%n", cosine);
-
-            // Ask user to repeat or return
-            System.out.print(yellow + "\nCalculate for other vectors? (Y/N): " + reset);
-            char repeatChoice = readMenuOption(SC, 'N', 'Y');
-            if (repeatChoice == 'N') break; // Exit loop
-            clearScreen(); // Clear screen before repeating
-        }
-    }
-
-    // Helper to read vector dimension (>= 1)
-    private static int getDimension() {
-         System.out.print(yellow + "Enter vector dimension d (must be >= 1): " + reset);
-         // Use readInt helper for range validation
-         return readInt(SC, 1, Integer.MAX_VALUE); // Ensures input is >= 1
-    }
-
-    // Helper to read a vector of dimension d with elements 0-9
-    private static int[] readVector(int d, String vectorName) {
-        int[] vector = new int[d]; // Create the integer array
-        int elementsRead = 0; // Counter for elements read so far
-
-        // Loop until the vector is filled
-        while (elementsRead < d) {
-            String line = SC.nextLine().trim(); // Read a line
-            if (line.isEmpty()) continue; // Ignore empty lines
-            
-            String[] tokens = line.split("\\s+"); // Split line into tokens
+            String[] tokens = line.split("\\s+");
             int tokensProcessedThisLine = 0;
-            
-            // Process tokens from the current line
+
             for (String token : tokens) {
-                if (elementsRead >= d) break; // Stop if vector is full
-                
-                // Validate: token must be a single digit 0-9
-                if (!token.matches("[0-9]")) { 
-                    System.out.println(red + "Invalid input: '" + token + "'. Elements must be single digits (0-9). Continue entering." + reset); 
-                    continue; // Skip this token
-                }
-                
-                try { 
-                    int value = Integer.parseInt(token); // Parse the digit
-                    vector[elementsRead++] = value; // Add to vector and increment counter
+                if (arrC.size() >= n) break;
+                try {
+                    double value = Double.parseDouble(token);
+                    arrC.add(value);
                     tokensProcessedThisLine++;
-                } catch (NumberFormatException e) { 
-                     // This should ideally not happen due to regex check, but included for safety
-                    System.out.println(red + "Error parsing digit: '" + token + "'. Continue entering." + reset);
+                } catch (NumberFormatException ex) {
+                    System.out.println(red + "Invalid number: '" + token + "'." + reset);
                 }
             }
-            
-             // Warn if extra tokens were ignored on this line after filling the vector
-            if (elementsRead >= d && tokensProcessedThisLine < tokens.length) {
+
+            if (arrC.size() >= n && tokensProcessedThisLine < tokens.length) {
                 String[] extras = Arrays.copyOfRange(tokens, tokensProcessedThisLine, tokens.length);
-                System.out.println(red + "Warning: " + extras.length + " extra value(s) ignored for vector " + vectorName + ": " + String.join(" ", extras) + reset);
+                System.out.println(red + "Warning: extra values ignored: " + String.join(" ", extras) + reset);
             }
         }
-        return vector; // Return the filled vector
+
+        double median = calculateMedian();
+        double arithmetic = calculateArithmeticMean();
+        double geometric = calculateGeometricMean();
+        double harmonic = calculateHarmonicMean();
+
+        System.out.println(green + "\nResults:" + reset);
+        System.out.printf(cyan + "Median:             " + reset + "%.6f%n", median);
+        System.out.printf(cyan + "Arithmetic mean:    " + reset + "%.6f%n", arithmetic);
+        if (Double.isNaN(geometric)) System.out.println(cyan + "Geometric mean:     " + reset + red + "undefined" + reset);
+        else System.out.printf(cyan + "Geometric mean:     " + reset + "%.6f%n", geometric);
+        if (Double.isNaN(harmonic)) System.out.println(cyan + "Harmonic mean:      " + reset + red + "undefined" + reset);
+        else System.out.printf(cyan + "Harmonic mean:      " + reset + "%.6f%n", harmonic);
+
+        System.out.print(yellow + "\nCalculate for another array? (Y/N): " + reset);
+        char repeatChoice = readMenuOption(SC, 'N', 'Y');
+        if (repeatChoice == 'N') break;
+        clearScreen();
+    }
+}
+
+/** Gets the array size from the user. */
+private static int arraySize() {
+    System.out.print(yellow + "Enter array size n (must be >= 1): " + reset);
+    return readInt(SC, 1, Integer.MAX_VALUE);
+}
+
+/** Finds the median value of the array. */
+private static double calculateMedian() {
+    if (arrC.isEmpty()) return 0.0;
+    ArrayList<Double> sortedCopy = new ArrayList<>(arrC);
+    sortedCopy.sort(Double::compareTo);
+    int n = sortedCopy.size();
+    if (n % 2 == 1) return sortedCopy.get(n / 2);
+    return (sortedCopy.get(n / 2 - 1) + sortedCopy.get(n / 2)) / 2.0;
+}
+
+/** Calculates arithmetic mean (average). */
+private static double calculateArithmeticMean() {
+    if (arrC.isEmpty()) return 0.0;
+    double sum = 0.0;
+    for (double v : arrC) sum += v;
+    return sum / arrC.size();
+}
+
+/** Calculates geometric mean. Returns NaN if any value ≤ 0. */
+private static double calculateGeometricMean() {
+    if (arrC.isEmpty()) return 0.0;
+    for (double v : arrC) if (v <= 0.0) return Double.NaN;
+    double logSum = 0.0;
+    for (double v : arrC) logSum += Math.log(v);
+    return Math.exp(logSum / arrC.size());
+}
+
+/** Calculates harmonic mean using recursion. Returns NaN if any value is 0. */
+private static double calculateHarmonicMean() {
+    if (arrC.isEmpty()) return 0.0;
+    for (double v : arrC) if (v == 0.0) return Double.NaN;
+    double sumOfReciprocals = harmonicRec(arrC, 0);
+    return arrC.size() / sumOfReciprocals;
+}
+
+/** Recursive helper that sums 1/x for harmonic mean. */
+private static double harmonicRec(ArrayList<Double> a, int index) {
+    if (index == a.size()) return 0.0;
+    return (1.0 / a.get(index)) + harmonicRec(a, index + 1);
+}
+
+/** Reads two arrays and shows Manhattan, Euclidean and Cosine results. */
+private static void distanceBetweenTwoArrays() {
+    while(true) {
+        System.out.println(yellow + "=== Distance between Two Arrays ===" + reset);
+        int d = getDimension();
+
+        System.out.println(cyan + "Enter first vector A (0-9):" + reset);
+        int[] vectorA = readVector(d, "A");
+
+        System.out.println(cyan + "Enter second vector B (0-9):" + reset);
+        int[] vectorB = readVector(d, "B");
+
+        double manhattan = calculateManhattanDistance(vectorA, vectorB);
+        double euclidean = calculateEuclideanDistance(vectorA, vectorB);
+        Double cosine = calculateCosineSimilarity(vectorA, vectorB);
+
+        System.out.println(green + "\nResults:" + reset);
+        System.out.printf(cyan + "Manhattan distance: " + reset + "%.6f%n", manhattan);
+        System.out.printf(cyan + "Euclidean distance: " + reset + "%.6f%n", euclidean);
+        if (cosine == null) System.out.println(cyan + "Cosine similarity:  " + reset + red + "undefined" + reset);
+        else System.out.printf(cyan + "Cosine similarity:  " + reset + "%.6f%n", cosine);
+
+        System.out.print(yellow + "\nCalculate for other vectors? (Y/N): " + reset);
+        char repeatChoice = readMenuOption(SC, 'N', 'Y');
+        if (repeatChoice == 'N') break;
+        clearScreen();
+    }
+}
+
+/** Reads the vector dimension. */
+private static int getDimension() {
+    System.out.print(yellow + "Enter vector dimension d (must be >= 1): " + reset);
+    return readInt(SC, 1, Integer.MAX_VALUE);
+}
+
+/** Reads a vector of given length with digits 0–9. */
+private static int[] readVector(int d, String vectorName) {
+    int[] vector = new int[d];
+    int elementsRead = 0;
+
+    while (elementsRead < d) {
+        String line = SC.nextLine().trim();
+        if (line.isEmpty()) continue;
+
+        String[] tokens = line.split("\\s+");
+        int tokensProcessedThisLine = 0;
+
+        for (String token : tokens) {
+            if (elementsRead >= d) break;
+            if (!token.matches("[0-9]")) {
+                System.out.println(red + "Invalid: '" + token + "'. Must be 0–9." + reset);
+                continue;
+            }
+            try {
+                int value = Integer.parseInt(token);
+                vector[elementsRead++] = value;
+                tokensProcessedThisLine++;
+            } catch (NumberFormatException e) {
+                System.out.println(red + "Error parsing '" + token + "'." + reset);
+            }
+        }
+
+        if (elementsRead >= d && tokensProcessedThisLine < tokens.length) {
+            String[] extras = Arrays.copyOfRange(tokens, tokensProcessedThisLine, tokens.length);
+            System.out.println(red + "Warning: extra values ignored for " + vectorName + reset);
+        }
+    }
+    return vector;
+}
+
+/** Calculates Manhattan distance (sum of absolute differences). */
+private static double calculateManhattanDistance(int[] a, int[] b) {
+    long sumOfAbsDiff = 0L;
+    for (int i = 0; i < a.length; i++) sumOfAbsDiff += Math.abs(a[i] - b[i]);
+    return (double) sumOfAbsDiff;
+}
+
+/** Calculates Euclidean distance (square root of squared differences). */
+private static double calculateEuclideanDistance(int[] a, int[] b) {
+    double sumOfSquares = 0.0;
+    for (int i = 0; i < a.length; i++) {
+        double diff = a[i] - b[i];
+        sumOfSquares += diff * diff;
+    }
+    return Math.sqrt(sumOfSquares);
+}
+
+/** Calculates cosine similarity between two vectors. */
+private static Double calculateCosineSimilarity(int[] a, int[] b) {
+    long dotProduct = 0L;
+    long magnitudeASquared = 0L;
+    long magnitudeBSquared = 0L;
+
+    for (int i = 0; i < a.length; i++) {
+        dotProduct += (long) a[i] * b[i];
+        magnitudeASquared += (long) a[i] * a[i];
+        magnitudeBSquared += (long) b[i] * b[i];
     }
 
-    // Calculates Manhattan distance (sum of absolute differences)
-    private static double calculateManhattanDistance(int[] a, int[] b) {
-        long sumOfAbsDiff = 0L; // Use long to prevent potential overflow
-        for (int i = 0; i < a.length; i++) {
-            sumOfAbsDiff += Math.abs(a[i] - b[i]); // Add absolute difference
-        }
-        return (double) sumOfAbsDiff; // Cast result to double
-    }
+    if (magnitudeASquared == 0L || magnitudeBSquared == 0L) return null;
+    return dotProduct / (Math.sqrt(magnitudeASquared) * Math.sqrt(magnitudeBSquared));
+}
 
-    // Calculates Euclidean distance (sqrt of sum of squared differences)
-    private static double calculateEuclideanDistance(int[] a, int[] b) {
-        double sumOfSquares = 0.0;
-        for (int i = 0; i < a.length; i++) {
-            double diff = a[i] - b[i]; // Calculate difference
-            sumOfSquares += diff * diff; // Add square of difference
-        }
-        return Math.sqrt(sumOfSquares); // Return the square root
-    }
-
-    // Calculates Cosine similarity (dot product / (magnitude A * magnitude B))
-    // Returns null if undefined (due to zero vector)
-    private static Double calculateCosineSimilarity(int[] a, int[] b) {
-        long dotProduct = 0L; // Use long for intermediate calculations
-        long magnitudeASquared = 0L;
-        long magnitudeBSquared = 0L;
-        
-        // Calculate dot product and squared magnitudes in one loop
-        for (int i = 0; i < a.length; i++) {
-            dotProduct += (long) a[i] * b[i]; // Cast to long before multiplication
-            magnitudeASquared += (long) a[i] * a[i];
-            magnitudeBSquared += (long) b[i] * b[i];
-        }
-        
-        // If either vector has zero magnitude, cosine similarity is undefined
-        if (magnitudeASquared == 0L || magnitudeBSquared == 0L) {
-            return null; // Indicate undefined result
-        }
-        
-        // Calculate similarity: dot / (sqrt(magA^2) * sqrt(magB^2))
-        return dotProduct / (Math.sqrt(magnitudeASquared) * Math.sqrt(magnitudeBSquared)); 
-    }
     
     /*
      * =============================
@@ -1257,4 +1239,5 @@ public class Main {
         mainMenu(); // Start the main menu loop
         SC.close(); // Close the scanner when the program exits
     }
+
 }
