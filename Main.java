@@ -471,7 +471,10 @@ public class Main {
      * Option B — Secondary School
      * =============================
      */
+   
+
 /**
+ *author MikailKaracaer
  * Shows the Secondary School submenu and routes to the selected task:
  * A) Prime Numbers, B) Step-by-step Evaluation of Expression, or
  * C) Return to the Main Menu.
@@ -1749,3 +1752,4 @@ private static Double calculateCosineSimilarity(int[] a, int[] b) {
         SC.close(); 
     }
 }
+
