@@ -959,6 +959,7 @@ public class Main {
  * Option C — High School  (with stricter inputs + quit)
  * =============================
  */
+**/
 *author Melek Sadiki
 /** Max array/vector length allowed in Option C (1–100). */
 private static final int C_MAX_SIZE = 100;
@@ -1752,5 +1753,6 @@ private static Double calculateCosineSimilarity(int[] a, int[] b) {
         SC.close(); 
     }
 }
+
 
 
